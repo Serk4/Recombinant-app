@@ -14,8 +14,8 @@ export function TipsPanel({ tips }: TipsPanelProps) {
 	return (
 		<div className='space-y-2'>
 			<p className='text-xs text-gray-400 mb-3'>
-				Best modifier combinations ranked by total stat value. Tap any tip to
-				apply those modifiers.
+				Best modifier combinations ranked by total stat value. The order shown
+				is the optimal slot sequence — slot order affects the final values.
 			</p>
 
 			{visible.map((tip, i) => (
@@ -57,13 +57,17 @@ function TipCard({ tip, rank }: { tip: TipEntry; rank: number }) {
 							+{tip.totalValue.toFixed(0)}%
 						</span>
 					</div>
-					<div className='flex flex-wrap gap-1 mt-1.5'>
-						{tip.modifiers.map((m) => (
-							<span
-								key={m.id}
-								className={`text-[11px] font-medium ${categoryColors[m.category]}`}
-							>
-								{m.icon} {m.name}
+					<div className='flex flex-wrap items-center gap-1 mt-1.5'>
+						{tip.modifiers.map((m, idx) => (
+							<span key={m.id} className='flex items-center gap-1'>
+								{idx > 0 && (
+									<span className='text-gray-600 text-[10px]'>→</span>
+								)}
+								<span
+									className={`text-[11px] font-medium ${categoryColors[m.category]}`}
+								>
+									{m.icon} {m.name}
+								</span>
 							</span>
 						))}
 					</div>
