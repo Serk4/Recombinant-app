@@ -90,7 +90,7 @@ export function calculateStats(selectedModifiers: Modifier[]): StatResult[] {
         break
 
       case 'compress':
-        // Remaining stacks become 50 % more potent.
+        // Remaining stacks become 50% more potent.
         if (modCat) {
           potency[modCat] *= 1.5
           addContributor(modCat, mod.name)
@@ -267,7 +267,7 @@ export function generateTips(): TipEntry[] {
     const names = combo.map((m) => m.name).join(' → ')
     tips.push({
       label: `Best ${statKey} combo`,
-      description: `Slot ${names} (in order) for +${value.toFixed(1)}% ${statKey}.`,
+      description: `Slot ${names} for +${value.toFixed(1)}% ${statKey}.`,
       modifiers: combo,
       statKey,
       totalValue: value,
