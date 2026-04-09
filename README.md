@@ -1,73 +1,33 @@
-# React + TypeScript + Vite
+# Recombinant – Division 2 Modifier Builder
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Tom Clancy's The Division 2 — Rise Up Y8S1**
 
-Currently, two official plugins are available:
+A mobile-first React app for building and testing passive modifier combinations. Select up to 3 modifiers, view the combined stat values in real time, and get guided tips on the best combinations for every buff in the game.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Features
 
-## React Compiler
+- **18 Passive Modifiers** across three categories — Offense, Defense, and Utility
+- **Live stat calculation** — combined values update instantly as you pick modifiers, including synergy bonuses when multiple modifiers share a stat
+- **Synergy indicators** — cards that pair well with your current selection are highlighted with a SYNERGY badge
+- **Slot reordering** — use the ◀▶ buttons to change the order of your 3 modifier slots
+- **Tips tab** — all best 1/2/3-modifier combos ranked by total stat value (e.g. best Headshot Damage, best Hazard Protection, best Repair Skill, etc.)
+- **Mobile-first** — designed for phone screens first, responsive on desktop
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Tech Stack
 
-## Expanding the ESLint configuration
+- [Vite](https://vite.dev/) + [React](https://react.dev/) + TypeScript
+- [Tailwind CSS v4](https://tailwindcss.com/) (via `@tailwindcss/vite`)
+- Deployable to [Vercel](https://vercel.com/) via `vercel.json`
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Getting Started
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+npm run dev       # start development server
+npm run build     # production build → dist/
+npm run lint      # run ESLint
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Deploying to Vercel
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Push the repository to GitHub and import it in Vercel. The `vercel.json` configuration handles the rest.
