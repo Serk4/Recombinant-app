@@ -1,42 +1,50 @@
 // Tom Clancy's The Division 2 – Rise Up (Y8S1) Passive Modifiers
 // Values are based on in-game data for the Y8S1 season
 
+// Offense: weaponHandling (default, 1%/stack), headshotDamage (C1, 3%/stack), magazineSize (C2, 1%/stack)
+// Defense: totalArmor (default, 0.5%/stack), protectionFromElites (C1, 0.5%/stack), hazardProtection (C2, 1%/stack)
+// Utility: skillDamage (default, 1%/stack), statusEffects (confirmed Utility attribute), skillHaste (possible Utility C2 – TBD)
 export type StatKey =
-  | 'weaponDamage'
+  | 'weaponHandling'
   | 'headshotDamage'
-  | 'critHitChance'
-  | 'critHitDamage'
-  | 'armorDamage'
-  | 'statusEffects'
+  | 'magazineSize'
   | 'totalArmor'
+  | 'protectionFromElites'
   | 'hazardProtection'
-  | 'repairSkill'
-  | 'outOfCombatRegen'
   | 'skillDamage'
+  | 'statusEffects'
   | 'skillHaste'
-  | 'skillDuration'
-  | 'ammoCapacity'
-  | 'explosiveDamage'
 
 export const STAT_LABELS: Record<StatKey, string> = {
-  weaponDamage: 'Weapon Damage',
+  weaponHandling: 'Weapon Handling',
   headshotDamage: 'Headshot Damage',
-  critHitChance: 'Critical Hit Chance',
-  critHitDamage: 'Critical Hit Damage',
-  armorDamage: 'Armor Damage',
-  statusEffects: 'Status Effects',
+  magazineSize: 'Magazine Size',
   totalArmor: 'Total Armor',
+  protectionFromElites: 'Protection from Elites',
   hazardProtection: 'Hazard Protection',
-  repairSkill: 'Repair Skill',
-  outOfCombatRegen: 'Out-of-Combat Regen',
   skillDamage: 'Skill Damage',
+  statusEffects: 'Status Effects',
   skillHaste: 'Skill Haste',
-  skillDuration: 'Skill Duration',
-  ammoCapacity: 'Ammo Capacity',
-  explosiveDamage: 'Explosive Damage',
 }
 
-export type Category = 'Offense' | 'Defense' | 'Utility'
+export type Category = 'Offense' | 'Defense' | 'Utility' | 'Wildcard'
+
+/** How a modifier changes stack counts across categories */
+export interface StackChange {
+  category: Category
+  /** Positive = add stacks, negative = remove stacks */
+  amount: number
+}
+
+/**
+ * How a modifier changes the stat a stack category contributes to.
+ * - none        : no change; stacks contribute to their default stat
+ * - saturate    : stacks stop contributing to stats entirely
+ * - compress    : removes stacks but makes remaining ones more potent
+ * - convert     : stacks contribute to a different stat instead
+ * - redistribute: stacks are moved to other categories
+ */
+export type EffectType = 'none' | 'saturate' | 'compress' | 'convert' | 'redistribute' | 'pivot' | 'nullify' | 'cascade' | 'converge' | 'equalize'
 
 export interface ModifierStat {
   stat: StatKey
@@ -51,6 +59,13 @@ export interface Modifier {
   name: string
   category: Category
   description: string
+  /** Stack count changes this modifier applies */
+  stackChanges: StackChange[]
+  /** The type of stat-contribution effect this modifier has */
+  effectType: EffectType
+  /** Human-readable description of the stat / effect change */
+  effectDescription: string
+  /** Approximate stat bonuses used for display and synergy calculation */
   stats: ModifierStat[]
   /** IDs of modifiers that pair especially well with this one */
   synergyWith: string[]
@@ -58,233 +73,404 @@ export interface Modifier {
 }
 
 // ─── OFFENSE ─────────────────────────────────────────────────────────────────
+// Source: in-game seasonal modifier table (Offense category)
+// Default stat for Offense stacks is Weapon Handling.
 
 const OFFENSE_MODIFIERS: Modifier[] = [
   {
-    id: 'headhunter',
-    name: 'Headhunter',
+    id: 'amplify',
+    name: 'Amplify',
     category: 'Offense',
-    description: 'Enhances precision targeting, increasing headshot damage and critical hit chance.',
-    stats: [
-      { stat: 'headshotDamage', baseValue: 15, synergyBonus: 5 },
-      { stat: 'critHitChance', baseValue: 8, synergyBonus: 3 },
+    description: 'Adds 5 Offense stacks with no change to contribution type.',
+    stackChanges: [{ category: 'Offense', amount: 5 }],
+    effectType: 'none',
+    effectDescription: 'No change to stat type',
+    // ~2% weapon handling per stack × +5 stacks
+    stats: [{ stat: 'weaponHandling', baseValue: 10, synergyBonus: 2 }],
+    synergyWith: ['compress', 'convert1', 'convert2'],
+    icon: '📈',
+  },
+  {
+    id: 'consume',
+    name: 'Consume',
+    category: 'Offense',
+    description: 'Gains 10 Offense stacks by consuming 5 Defense and 5 Utility stacks.',
+    stackChanges: [
+      { category: 'Offense', amount: 10 },
+      { category: 'Defense', amount: -5 },
+      { category: 'Utility', amount: -5 },
     ],
-    synergyWith: ['sharpshooter', 'reckless'],
+    effectType: 'none',
+    effectDescription: 'No change to stat type',
+    // ~2% weapon handling per stack × +10 offense stacks (net gain)
+    stats: [{ stat: 'weaponHandling', baseValue: 20, synergyBonus: 4 }],
+    synergyWith: ['amplify', 'compress', 'convert1', 'convert2'],
+    icon: '🔄',
+  },
+  {
+    id: 'saturate',
+    name: 'Saturate',
+    category: 'Offense',
+    description: 'Adds 25 Offense stacks, but they no longer contribute to stats.',
+    stackChanges: [{ category: 'Offense', amount: 25 }],
+    effectType: 'saturate',
+    effectDescription: 'Offense stacks stop contributing to stats (still count for other passives)',
+    stats: [],
+    synergyWith: ['compress'],
+    icon: '💧',
+  },
+  {
+    id: 'compress',
+    name: 'Compress',
+    category: 'Offense',
+    description: 'Removes 10 Offense stacks, but each remaining stack is 50% more potent.',
+    stackChanges: [{ category: 'Offense', amount: -10 }],
+    effectType: 'compress',
+    effectDescription: 'Each remaining Offense stack is 50% more potent',
+    // Value scales with remaining stacks; synergy bonus represents potency gain
+    stats: [{ stat: 'weaponHandling', baseValue: 0, synergyBonus: 8 }],
+    synergyWith: ['amplify', 'consume', 'saturate'],
+    icon: '🗜️',
+  },
+  {
+    id: 'convert1',
+    name: 'Convert 1',
+    category: 'Offense',
+    description: 'Offense stacks now provide Headshot Damage at 3% per stack instead of Weapon Handling.',
+    stackChanges: [],
+    effectType: 'convert',
+    effectDescription: 'Offense → Headshot Damage (base 3% per stack) instead of Weapon Handling',
+    // 3% per stack × ~10 base offense stacks
+    stats: [{ stat: 'headshotDamage', baseValue: 30, synergyBonus: 6 }],
+    synergyWith: ['amplify', 'consume'],
     icon: '🎯',
   },
   {
-    id: 'sharpshooter',
-    name: 'Sharpshooter',
+    id: 'convert2',
+    name: 'Convert 2',
     category: 'Offense',
-    description: 'Amplifies long-range weapon proficiency, boosting headshot and weapon damage.',
-    stats: [
-      { stat: 'headshotDamage', baseValue: 12, synergyBonus: 4 },
-      { stat: 'weaponDamage', baseValue: 6, synergyBonus: 2 },
-    ],
-    synergyWith: ['headhunter', 'lethality'],
-    icon: '🔭',
+    description: 'Offense stacks now provide Magazine Size at 1% per stack instead of Weapon Handling.',
+    stackChanges: [],
+    effectType: 'convert',
+    effectDescription: 'Offense → Magazine Size (base 1% per stack) instead of Weapon Handling',
+    // 1% per stack × ~10 base offense stacks
+    stats: [{ stat: 'magazineSize', baseValue: 10, synergyBonus: 2 }],
+    synergyWith: ['amplify', 'consume'],
+    icon: '🔋',
   },
   {
-    id: 'reckless',
-    name: 'Reckless',
+    id: 'split',
+    name: 'Split',
     category: 'Offense',
-    description: 'Pushes the offensive advantage by maximizing weapon and critical hit damage.',
-    stats: [
-      { stat: 'weaponDamage', baseValue: 10, synergyBonus: 4 },
-      { stat: 'critHitDamage', baseValue: 12, synergyBonus: 4 },
+    description: 'Redistributes 15 Offense stacks as 10 Defense and 10 Utility stacks.',
+    stackChanges: [
+      { category: 'Offense', amount: -15 },
+      { category: 'Defense', amount: 10 },
+      { category: 'Utility', amount: 10 },
     ],
-    synergyWith: ['lethality', 'headhunter'],
-    icon: '💥',
+    effectType: 'redistribute',
+    effectDescription: 'Redistributes stacks',
+    stats: [],
+    synergyWith: [],
+    icon: '↔️',
   },
   {
-    id: 'lethality',
-    name: 'Lethality',
+    id: 'pivotO',
+    name: 'Pivot',
     category: 'Offense',
-    description: 'Increases all forms of weapon damage against armored targets.',
-    stats: [
-      { stat: 'weaponDamage', baseValue: 8, synergyBonus: 3 },
-      { stat: 'armorDamage', baseValue: 14, synergyBonus: 5 },
-    ],
-    synergyWith: ['reckless', 'sharpshooter'],
-    icon: '⚔️',
-  },
-  {
-    id: 'demolitionist',
-    name: 'Demolitionist',
-    category: 'Offense',
-    description: 'Enhances explosive and area-of-effect damage output.',
-    stats: [
-      { stat: 'explosiveDamage', baseValue: 18, synergyBonus: 6 },
-      { stat: 'statusEffects', baseValue: 8, synergyBonus: 3 },
-    ],
-    synergyWith: ['incendiary', 'statusSpecialist'],
-    icon: '💣',
-  },
-  {
-    id: 'incendiary',
-    name: 'Incendiary',
-    category: 'Offense',
-    description: 'Amplifies status effects and debuff potency on targets.',
-    stats: [
-      { stat: 'statusEffects', baseValue: 15, synergyBonus: 5 },
-      { stat: 'critHitChance', baseValue: 5, synergyBonus: 2 },
-    ],
-    synergyWith: ['demolitionist', 'statusSpecialist'],
-    icon: '🔥',
+    description: 'Boosts the current lowest module by increasing whichever module is currently the lowest.',
+    stackChanges: [],
+    effectType: 'pivot',
+    effectDescription: 'Increases whichever module is currently the lowest',
+    stats: [],
+    synergyWith: [],
+    icon: '🔃',
   },
 ]
 
 // ─── DEFENSE ─────────────────────────────────────────────────────────────────
+// Values verified in-game (Y8S1 Rise Up)
+// Default stat for Defense stacks is Max Armor (Total Armor).
 
 const DEFENSE_MODIFIERS: Modifier[] = [
   {
-    id: 'juggernaut',
-    name: 'Juggernaut',
+    id: 'amplifyD',
+    name: 'Amplify (Defense)',
     category: 'Defense',
-    description: 'Hardens the agent\'s armor plating for increased total armor.',
-    stats: [
-      { stat: 'totalArmor', baseValue: 15, synergyBonus: 5 },
-      { stat: 'hazardProtection', baseValue: 6, synergyBonus: 2 },
-    ],
-    synergyWith: ['ironclad', 'hazardSuit'],
-    icon: '🛡️',
+    description: 'Adds 5 Defense stacks with no change to contribution type.',
+    stackChanges: [{ category: 'Defense', amount: 5 }],
+    effectType: 'none',
+    effectDescription: 'No change to stat type',
+    // ~0.5% total armor per stack × +5 stacks
+    stats: [{ stat: 'totalArmor', baseValue: 2.5, synergyBonus: 1 }],
+    synergyWith: ['compressD', 'convert1D', 'convert2D'],
+    icon: '📈',
   },
   {
-    id: 'ironclad',
-    name: 'Ironclad',
+    id: 'consumeD',
+    name: 'Consume (Defense)',
     category: 'Defense',
-    description: 'Bolsters repair protocols and armor regeneration.',
-    stats: [
-      { stat: 'repairSkill', baseValue: 18, synergyBonus: 6 },
-      { stat: 'totalArmor', baseValue: 8, synergyBonus: 3 },
+    description: 'Gains 10 Defense stacks by consuming 5 Offense and 5 Utility stacks.',
+    stackChanges: [
+      { category: 'Defense', amount: 10 },
+      { category: 'Offense', amount: -5 },
+      { category: 'Utility', amount: -5 },
     ],
-    synergyWith: ['juggernaut', 'medic'],
-    icon: '⚙️',
+    effectType: 'none',
+    effectDescription: 'No change to stat type',
+    // ~0.5% total armor per stack × +10 defense stacks (net gain)
+    stats: [{ stat: 'totalArmor', baseValue: 5, synergyBonus: 2 }],
+    synergyWith: ['amplifyD', 'compressD', 'convert1D', 'convert2D'],
+    icon: '🔄',
   },
   {
-    id: 'hazardSuit',
-    name: 'Hazard Suit',
+    id: 'saturateD',
+    name: 'Saturate (Defense)',
     category: 'Defense',
-    description: 'Provides superior protection against environmental and chemical hazards.',
-    stats: [
-      { stat: 'hazardProtection', baseValue: 20, synergyBonus: 7 },
-      { stat: 'statusEffects', baseValue: 5, synergyBonus: 2 },
-    ],
-    synergyWith: ['juggernaut', 'resilience'],
+    description: 'Adds 25 Defense stacks, but they no longer contribute to stats.',
+    stackChanges: [{ category: 'Defense', amount: 25 }],
+    effectType: 'saturate',
+    effectDescription: 'Defense stacks stop contributing to stats (still count for other passives such as Cascade/Convert)',
+    stats: [],
+    synergyWith: ['cascade', 'convert1D', 'convert2D'],
+    icon: '💧',
+  },
+  {
+    id: 'compressD',
+    name: 'Compress (Defense)',
+    category: 'Defense',
+    description: 'Removes 10 Defense stacks, but each remaining stack is 50% more potent.',
+    stackChanges: [{ category: 'Defense', amount: -10 }],
+    effectType: 'compress',
+    effectDescription: 'Each remaining Defense stack is 50% more potent',
+    stats: [{ stat: 'totalArmor', baseValue: 0, synergyBonus: 6 }],
+    synergyWith: ['amplifyD', 'consumeD', 'nullify'],
+    icon: '🗜️',
+  },
+  {
+    id: 'convert1D',
+    name: 'Convert 1 (Defense)',
+    category: 'Defense',
+    description: 'Defense stacks now provide Protection from Elites at ~1.125% per stack instead of Max Armor.',
+    stackChanges: [],
+    effectType: 'convert',
+    effectDescription: 'Defense → Protection from Elites (~1.125%/stack) instead of Max Armor. Best with 20 stacks = 22.5% PFE.',
+    // ~1.125% per stack × ~20 base defense stacks
+    stats: [{ stat: 'protectionFromElites', baseValue: 22.5, synergyBonus: 4.5 }],
+    synergyWith: ['amplifyD', 'consumeD', 'saturateD'],
+    icon: '⭐',
+  },
+  {
+    id: 'convert2D',
+    name: 'Convert 2 (Defense)',
+    category: 'Defense',
+    description: 'Defense stacks now provide Hazard Protection at ~1.5–2.25% per stack instead of Max Armor.',
+    stackChanges: [],
+    effectType: 'convert',
+    effectDescription: 'Defense → Hazard Protection (~1.5–2.25%/stack) instead of Max Armor.',
+    // ~2.25% per stack × ~20 base defense stacks
+    stats: [{ stat: 'hazardProtection', baseValue: 45, synergyBonus: 9 }],
+    synergyWith: ['amplifyD', 'consumeD'],
     icon: '☢️',
   },
   {
-    id: 'medic',
-    name: 'Medic',
+    id: 'splitD',
+    name: 'Split (Defense)',
     category: 'Defense',
-    description: 'Enhances out-of-combat healing and repair skill effectiveness.',
-    stats: [
-      { stat: 'outOfCombatRegen', baseValue: 20, synergyBonus: 7 },
-      { stat: 'repairSkill', baseValue: 10, synergyBonus: 4 },
+    description: 'Redistributes 15 Defense stacks as 10 Offense and 10 Utility stacks.',
+    stackChanges: [
+      { category: 'Defense', amount: -15 },
+      { category: 'Offense', amount: 10 },
+      { category: 'Utility', amount: 10 },
     ],
-    synergyWith: ['ironclad', 'resilience'],
-    icon: '🩺',
+    effectType: 'redistribute',
+    effectDescription: 'Redistributes stacks',
+    stats: [],
+    synergyWith: [],
+    icon: '↔️',
   },
   {
-    id: 'resilience',
-    name: 'Resilience',
+    id: 'pivotD',
+    name: 'Pivot (Defense)',
     category: 'Defense',
-    description: 'Improves hazard protection and out-of-combat recovery simultaneously.',
-    stats: [
-      { stat: 'hazardProtection', baseValue: 12, synergyBonus: 4 },
-      { stat: 'outOfCombatRegen', baseValue: 10, synergyBonus: 3 },
-    ],
-    synergyWith: ['hazardSuit', 'medic'],
-    icon: '💪',
-  },
-  {
-    id: 'statusSpecialist',
-    name: 'Status Specialist',
-    category: 'Defense',
-    description: 'Reduces the duration and potency of enemy-inflicted status effects.',
-    stats: [
-      { stat: 'hazardProtection', baseValue: 10, synergyBonus: 3 },
-      { stat: 'totalArmor', baseValue: 10, synergyBonus: 3 },
-    ],
-    synergyWith: ['juggernaut', 'hazardSuit'],
-    icon: '🧪',
+    description: 'Boosts the current lowest module using Defense stacks.',
+    stackChanges: [],
+    effectType: 'pivot',
+    effectDescription: 'Increases the lowest module’s stacks using available Defense stacks. Useful in recovery builds.',
+    stats: [],
+    synergyWith: [],
+    icon: '🔁',
   },
 ]
 
 // ─── UTILITY ─────────────────────────────────────────────────────────────────
+// Values verified in-game (Y8S1 Rise Up)
 
 const UTILITY_MODIFIERS: Modifier[] = [
   {
-    id: 'techWiz',
-    name: 'Tech Wizard',
+    id: 'amplifyU',
+    name: 'Amplify',
     category: 'Utility',
-    description: 'Optimizes skill deployment speed and reduces skill cooldowns.',
-    stats: [
-      { stat: 'skillHaste', baseValue: 15, synergyBonus: 5 },
-      { stat: 'skillDuration', baseValue: 10, synergyBonus: 3 },
-    ],
-    synergyWith: ['overclocked', 'combatMedic'],
-    icon: '⚡',
+    description: 'Adds 5 Utility stacks with no change to contribution type.',
+    stackChanges: [{ category: 'Utility', amount: 5 }],
+    effectType: 'none',
+    effectDescription: 'No change to stat type',
+    stats: [{ stat: 'skillDamage', baseValue: 10, synergyBonus: 2 }],
+    synergyWith: ['compressU', 'convert1U', 'convert2U'],
+    icon: '📈',
   },
   {
-    id: 'overclocked',
-    name: 'Overclocked',
+    id: 'consumeU',
+    name: 'Consume',
     category: 'Utility',
-    description: 'Dramatically boosts skill damage and amplifies skill effectiveness.',
-    stats: [
-      { stat: 'skillDamage', baseValue: 18, synergyBonus: 6 },
-      { stat: 'skillHaste', baseValue: 8, synergyBonus: 3 },
+    description: 'Gains 10 Utility stacks by consuming 5 Offense and 5 Defense stacks.',
+    stackChanges: [
+      { category: 'Utility', amount: 10 },
+      { category: 'Offense', amount: -5 },
+      { category: 'Defense', amount: -5 },
     ],
-    synergyWith: ['techWiz', 'combatMedic'],
-    icon: '🔋',
+    effectType: 'none',
+    effectDescription: 'No change to stat type',
+    stats: [{ stat: 'skillDamage', baseValue: 20, synergyBonus: 4 }],
+    synergyWith: ['amplifyU', 'compressU', 'convert1U', 'convert2U'],
+    icon: '🔄',
   },
   {
-    id: 'combatMedic',
-    name: 'Combat Medic',
+    id: 'saturateU',
+    name: 'Saturate',
     category: 'Utility',
-    description: 'Improves skill duration and repair skill for sustained operations.',
-    stats: [
-      { stat: 'skillDuration', baseValue: 18, synergyBonus: 6 },
-      { stat: 'repairSkill', baseValue: 8, synergyBonus: 3 },
-    ],
-    synergyWith: ['techWiz', 'overclocked'],
-    icon: '🏥',
+    description: 'Adds 25 Utility stacks, but they no longer contribute to stats.',
+    stackChanges: [{ category: 'Utility', amount: 25 }],
+    effectType: 'saturate',
+    effectDescription: 'Utility stacks stop contributing to stats (still count for other passives)',
+    stats: [],
+    synergyWith: ['cascade', 'converge'],
+    icon: '💧',
   },
   {
-    id: 'quartermaster',
-    name: 'Quartermaster',
+    id: 'compressU',
+    name: 'Compress',
     category: 'Utility',
-    description: 'Increases ammunition reserves across all weapon types.',
-    stats: [
-      { stat: 'ammoCapacity', baseValue: 25, synergyBonus: 8 },
-      { stat: 'weaponDamage', baseValue: 4, synergyBonus: 2 },
-    ],
-    synergyWith: ['tactician', 'overclocked'],
-    icon: '📦',
+    description: 'Removes 10 Utility stacks, but each remaining stack is 50% more potent.',
+    stackChanges: [{ category: 'Utility', amount: -10 }],
+    effectType: 'compress',
+    effectDescription: 'Each remaining Utility stack is 50% more potent',
+    stats: [{ stat: 'skillDamage', baseValue: 0, synergyBonus: 8 }],
+    synergyWith: ['amplifyU', 'consumeU', 'saturateU'],
+    icon: '🗜️',
   },
   {
-    id: 'tactician',
-    name: 'Tactician',
+    id: 'convert1U',
+    name: 'Convert 1',
     category: 'Utility',
-    description: 'Balances skill haste and ammo capacity for versatile combat readiness.',
-    stats: [
-      { stat: 'skillHaste', baseValue: 10, synergyBonus: 3 },
-      { stat: 'ammoCapacity', baseValue: 15, synergyBonus: 5 },
-    ],
-    synergyWith: ['quartermaster', 'techWiz'],
-    icon: '🗺️',
+    description: 'Utility stacks now provide Status Effects (Damage & Duration) instead of Skill Damage.',
+    stackChanges: [],
+    effectType: 'convert',
+    effectDescription: 'Utility → Status Effects (Damage & Duration) instead of Skill Damage',
+    stats: [{ stat: 'statusEffects', baseValue: 20, synergyBonus: 5 }],
+    synergyWith: ['amplifyU', 'consumeU'],
+    icon: '☣️',
   },
   {
-    id: 'engineerSpec',
-    name: 'Engineer',
+    id: 'convert2U',
+    name: 'Convert 2',
     category: 'Utility',
-    description: 'Extends skill duration and increases skill damage for prolonged engagements.',
-    stats: [
-      { stat: 'skillDuration', baseValue: 12, synergyBonus: 4 },
-      { stat: 'skillDamage', baseValue: 10, synergyBonus: 3 },
+    description: 'Utility stacks now provide Skill Haste / Cooldown Reduction instead of Skill Damage.',
+    stackChanges: [],
+    effectType: 'convert',
+    effectDescription: 'Utility → Skill Haste / Cooldown Reduction instead of Skill Damage',
+    stats: [{ stat: 'skillHaste', baseValue: 10, synergyBonus: 2 }],
+    synergyWith: ['amplifyU', 'consumeU'],
+    icon: '⏱️',
+  },
+  {
+    id: 'splitU',
+    name: 'Split',
+    category: 'Utility',
+    description: 'Redistributes 15 Utility stacks as 10 Offense and 10 Defense stacks.',
+    stackChanges: [
+      { category: 'Utility', amount: -15 },
+      { category: 'Offense', amount: 10 },
+      { category: 'Defense', amount: 10 },
     ],
-    synergyWith: ['overclocked', 'combatMedic'],
-    icon: '🔧',
+    effectType: 'redistribute',
+    effectDescription: 'Redistributes stacks',
+    stats: [],
+    synergyWith: [],
+    icon: '↔️',
+  },
+  {
+    id: 'pivotU',
+    name: 'Pivot',
+    category: 'Utility',
+    description: 'Boosts the current lowest module by increasing whichever module is currently the lowest.',
+    stackChanges: [],
+    effectType: 'pivot',
+    effectDescription: 'Increases whichever module is currently the lowest',
+    stats: [],
+    synergyWith: [],
+    icon: '🔃',
+  },
+]
+
+// ─── WILDCARD ───────────────────────────────────────────────────────────────
+// Values verified in-game (Y8S1 Rise Up)
+
+const WILDCARD_MODIFIERS: Modifier[] = [
+  {
+    id: 'nullify',
+    name: 'Nullify',
+    category: 'Wildcard',
+    description:
+      'Reverses all previous value changes on the lowest module — additions become subtractions and vice-versa.',
+    stackChanges: [],
+    effectType: 'nullify',
+    effectDescription:
+      'Reverses additions/subtractions on the lowest stack module. Fails if two or more modules are tied for lowest. Invert passives are unaffected.',
+    stats: [],
+    synergyWith: ['compress', 'convert1', 'convert2'],
+    icon: '↩️',
+  },
+  {
+    id: 'cascade',
+    name: 'Cascade',
+    category: 'Wildcard',
+    description:
+      'Disables the highest module’s stacks, then splits half its value (rounded up) equally into the other two modules.',
+    stackChanges: [],
+    effectType: 'cascade',
+    effectDescription:
+      'Highest module’s stacks stop contributing; +⌈highest/2⌉ stacks added to each other two modules. Fails if two or more tied for highest.',
+    stats: [],
+    synergyWith: ['amplify', 'consume'],
+    icon: '🌀',
+  },
+  {
+    id: 'converge',
+    name: 'Converge',
+    category: 'Wildcard',
+    description:
+      'The lowest module gains the average of the other two modules’ stacks; the other two are then reduced to 0.',
+    stackChanges: [],
+    effectType: 'converge',
+    effectDescription:
+      'Lowest module = average of the other two, then the other two drop to 0. Fails if two or more tied for lowest.',
+    stats: [],
+    synergyWith: ['amplify', 'consume', 'saturate'],
+    icon: '➡️',
+  },
+  {
+    id: 'equalize',
+    name: 'Equalize',
+    category: 'Wildcard',
+    description: 'All three modules become equal to the middle stack value.',
+    stackChanges: [],
+    effectType: 'equalize',
+    effectDescription:
+      'All modules set to the median stack count. Fails if the middle value is tied with the highest or lowest.',
+    stats: [],
+    synergyWith: [],
+    icon: '⚖️',
   },
 ]
 
@@ -292,12 +478,14 @@ export const ALL_MODIFIERS: Modifier[] = [
   ...OFFENSE_MODIFIERS,
   ...DEFENSE_MODIFIERS,
   ...UTILITY_MODIFIERS,
+  ...WILDCARD_MODIFIERS,
 ]
 
 export const MODIFIERS_BY_CATEGORY: Record<Category, Modifier[]> = {
   Offense: OFFENSE_MODIFIERS,
   Defense: DEFENSE_MODIFIERS,
   Utility: UTILITY_MODIFIERS,
+  Wildcard: WILDCARD_MODIFIERS,
 }
 
 export const MAX_SELECTED = 3
