@@ -85,8 +85,8 @@ const OFFENSE_MODIFIERS: Modifier[] = [
     stackChanges: [{ category: 'Offense', amount: 5 }],
     effectType: 'none',
     effectDescription: 'No change to stat type',
-    // ~2% weapon handling per stack × +5 stacks
-    stats: [{ stat: 'weaponHandling', baseValue: 10, synergyBonus: 2 }],
+    // 1% weapon handling per stack × +5 stacks
+    stats: [{ stat: 'weaponHandling', baseValue: 5, synergyBonus: 1 }],
     synergyWith: ['compress', 'convert1', 'convert2'],
     icon: '📈',
   },
@@ -102,8 +102,8 @@ const OFFENSE_MODIFIERS: Modifier[] = [
     ],
     effectType: 'none',
     effectDescription: 'No change to stat type',
-    // ~2% weapon handling per stack × +10 offense stacks (net gain)
-    stats: [{ stat: 'weaponHandling', baseValue: 20, synergyBonus: 4 }],
+    // 1% weapon handling per stack × +10 offense stacks (net gain)
+    stats: [{ stat: 'weaponHandling', baseValue: 10, synergyBonus: 2 }],
     synergyWith: ['amplify', 'compress', 'convert1', 'convert2'],
     icon: '🔄',
   },
@@ -140,8 +140,8 @@ const OFFENSE_MODIFIERS: Modifier[] = [
     stackChanges: [],
     effectType: 'convert',
     effectDescription: 'Offense → Headshot Damage (base 3% per stack) instead of Weapon Handling',
-    // 3% per stack × ~10 base offense stacks
-    stats: [{ stat: 'headshotDamage', baseValue: 30, synergyBonus: 6 }],
+    // 3% per stack × ~20 base offense stacks
+    stats: [{ stat: 'headshotDamage', baseValue: 60, synergyBonus: 15 }],
     synergyWith: ['amplify', 'consume'],
     icon: '🎯',
   },
@@ -153,8 +153,8 @@ const OFFENSE_MODIFIERS: Modifier[] = [
     stackChanges: [],
     effectType: 'convert',
     effectDescription: 'Offense → Magazine Size (base 1% per stack) instead of Weapon Handling',
-    // 1% per stack × ~10 base offense stacks
-    stats: [{ stat: 'magazineSize', baseValue: 10, synergyBonus: 2 }],
+    // 1% per stack × ~20 base offense stacks
+    stats: [{ stat: 'magazineSize', baseValue: 20, synergyBonus: 5 }],
     synergyWith: ['amplify', 'consume'],
     icon: '🔋',
   },
@@ -315,7 +315,7 @@ const UTILITY_MODIFIERS: Modifier[] = [
     stackChanges: [{ category: 'Utility', amount: 5 }],
     effectType: 'none',
     effectDescription: 'No change to stat type',
-    stats: [{ stat: 'skillDamage', baseValue: 10, synergyBonus: 2 }],
+    stats: [{ stat: 'skillDamage', baseValue: 5, synergyBonus: 1 }],
     synergyWith: ['compressU', 'convert1U', 'convert2U'],
     icon: '📈',
   },
@@ -331,7 +331,7 @@ const UTILITY_MODIFIERS: Modifier[] = [
     ],
     effectType: 'none',
     effectDescription: 'No change to stat type',
-    stats: [{ stat: 'skillDamage', baseValue: 20, synergyBonus: 4 }],
+    stats: [{ stat: 'skillDamage', baseValue: 10, synergyBonus: 2 }],
     synergyWith: ['amplifyU', 'compressU', 'convert1U', 'convert2U'],
     icon: '🔄',
   },
@@ -367,7 +367,7 @@ const UTILITY_MODIFIERS: Modifier[] = [
     stackChanges: [],
     effectType: 'convert',
     effectDescription: 'Utility → Status Effects (Damage & Duration) instead of Skill Damage',
-    stats: [{ stat: 'statusEffects', baseValue: 20, synergyBonus: 5 }],
+    stats: [{ stat: 'statusEffects', baseValue: 20, synergyBonus: 4 }],
     synergyWith: ['amplifyU', 'consumeU'],
     icon: '☣️',
   },

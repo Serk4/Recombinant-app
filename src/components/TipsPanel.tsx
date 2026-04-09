@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { TipEntry } from '../utils/calculator'
 import { STAT_LABELS } from '../data/modifiers'
+import { StackBasicsPanel } from './StackBasicsPanel'
 
 interface TipsPanelProps {
 	tips: TipEntry[]
@@ -12,24 +13,37 @@ export function TipsPanel({ tips }: TipsPanelProps) {
 	const visible = expanded ? tips : tips.slice(0, 6)
 
 	return (
-		<div className='space-y-2'>
-			<p className='text-xs text-gray-400 mb-3'>
-				Best modifier combinations ranked by total stat value. The order shown
-				is the optimal slot sequence — slot order affects the final values.
-			</p>
+		<div className='space-y-4'>
+			{/* Stack system explainer */}
+			<section className='bg-gray-800/30 border border-gray-700/40 rounded-xl p-4'>
+				<StackBasicsPanel />
+			</section>
 
-			{visible.map((tip, i) => (
-				<TipCard key={tip.statKey} tip={tip} rank={i + 1} />
-			))}
+			{/* Combination tips */}
+			<div>
+				<h3 className='text-xs font-bold text-gray-200 mb-1 flex items-center gap-1.5'>
+					<span>🏆</span> Best Combinations Guide
+				</h3>
+				<p className='text-xs text-gray-400 mb-3'>
+					Best modifier combinations ranked by total stat value. The order shown
+					is the optimal slot sequence — slot order affects the final values.
+				</p>
 
-			{tips.length > 6 && (
-				<button
-					onClick={() => setExpanded((e) => !e)}
-					className='w-full text-xs text-green-400 hover:text-green-300 py-2 transition-colors'
-				>
-					{expanded ? '▲ Show less' : `▼ Show ${tips.length - 6} more tips`}
-				</button>
-			)}
+				<div className='space-y-2'>
+					{visible.map((tip, i) => (
+						<TipCard key={tip.statKey} tip={tip} rank={i + 1} />
+					))}
+				</div>
+
+				{tips.length > 6 && (
+					<button
+						onClick={() => setExpanded((e) => !e)}
+						className='w-full text-xs text-green-400 hover:text-green-300 py-2 transition-colors'
+					>
+						{expanded ? '▲ Show less' : `▼ Show ${tips.length - 6} more tips`}
+					</button>
+				)}
+			</div>
 		</div>
 	)
 }

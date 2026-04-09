@@ -198,8 +198,8 @@ function App() {
 				) : (
 					/* ── TIPS TAB ── */
 					<section className='mt-4 bg-gray-900/60 border border-gray-800 rounded-2xl p-4'>
-						<h2 className='text-sm font-bold text-gray-300 mb-1 flex items-center gap-1.5'>
-							<span>💡</span> Best Combinations Guide
+						<h2 className='text-sm font-bold text-gray-300 mb-3 flex items-center gap-1.5'>
+							<span>💡</span> Tips &amp; Stack Basics
 						</h2>
 						<TipsPanel tips={tips} />
 					</section>

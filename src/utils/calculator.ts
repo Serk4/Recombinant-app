@@ -14,22 +14,26 @@ type SimCat = 'Offense' | 'Defense' | 'Utility'
 
 const SIM_CATS: SimCat[] = ['Offense', 'Defense', 'Utility']
 
-/** Starting stack count for each category before any modifiers are applied */
+/**
+ * Starting stack count for each category with all Active Modifiers fully levelled.
+ * Base = 8 stacks per module + 4 levels × 3 Active Modifiers = +12 → 20 per module.
+ */
 const BASE_STACKS: Record<SimCat, number> = {
-  Offense: 10,
+  Offense: 20,
   Defense: 20,
-  Utility: 10,
+  Utility: 20,
 }
 
 /**
  * Stat value gained per stack for each category.
  * The key is the StatKey that can be contributed by that category
  * (default stat or via a Convert modifier).
+ * Default rates (confirmed Y8S1): Offense 1%/stack WH, Defense 0.5%/stack Armor, Utility 1%/stack SD.
  */
 const STACK_RATES: Record<SimCat, Partial<Record<StatKey, number>>> = {
-  Offense: { weaponHandling: 2, headshotDamage: 3, magazineSize: 1 },
+  Offense: { weaponHandling: 1, headshotDamage: 3, magazineSize: 1 },
   Defense: { totalArmor: 0.5, protectionFromElites: 1.125, hazardProtection: 2.25 },
-  Utility: { skillDamage: 2, statusEffects: 2, skillHaste: 1 },
+  Utility: { skillDamage: 1, statusEffects: 1, skillHaste: 0.5 },
 }
 
 /** Default stat produced by each category when no Convert modifier is active */
