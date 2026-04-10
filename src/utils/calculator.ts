@@ -2,23 +2,25 @@ import type { Modifier, StatKey } from '../data/modifiers'
 import { ALL_MODIFIERS } from '../data/modifiers'
 
 export interface StatResult {
+  category: SimCat
   stat: StatKey
   total: number
+  finalStacks: number
   /** Which modifiers contribute to this stat */
   contributors: string[]
 }
 
 // ─── Stack simulation constants ──────────────────────────────────────────────
 
-type SimCat = 'Offense' | 'Defense' | 'Utility'
+export type SimCat = 'Offense' | 'Defense' | 'Utility'
 
 const SIM_CATS: SimCat[] = ['Offense', 'Defense', 'Utility']
 
 /** Starting stack count for each category before any modifiers are applied */
 const BASE_STACKS: Record<SimCat, number> = {
-  Offense: 10,
+  Offense: 20,
   Defense: 20,
-  Utility: 10,
+  Utility: 20,
 }
 
 /**
@@ -168,35 +170,24 @@ export function calculateStats(selectedModifiers: Modifier[]): StatResult[] {
   }
 
   // ── Compute final stats from the resulting stack state ───────────────────
-  const statMap = new Map<StatKey, { total: number; contributors: string[] }>()
+  const results: StatResult[] = []
 
   for (const cat of SIM_CATS) {
-    if (disabled[cat]) continue
     const effectiveStat = convertStat[cat] ?? DEFAULT_CAT_STAT[cat]
-    const rate = STACK_RATES[cat][effectiveStat] ?? 0
     const finalStacks = Math.max(0, stacks[cat])
-    const value = finalStacks * rate * potency[cat]
-    if (value <= 0) continue
+    const value = disabled[cat] ? 0 : finalStacks * (STACK_RATES[cat][effectiveStat] ?? 0) * potency[cat]
 
     const contributors =
-      catContributors[cat].length > 0
-        ? catContributors[cat]
-        : selectedModifiers.map((m) => m.name)
+      disabled[cat]
+        ? ['Saturated — no contribution']
+        : catContributors[cat].length > 0
+          ? catContributors[cat]
+          : selectedModifiers.map((m) => m.name)
 
-    const existing = statMap.get(effectiveStat)
-    if (existing) {
-      existing.total += value
-      for (const c of contributors) {
-        if (!existing.contributors.includes(c)) existing.contributors.push(c)
-      }
-    } else {
-      statMap.set(effectiveStat, { total: value, contributors: [...contributors] })
-    }
+    results.push({ category: cat, stat: effectiveStat, total: value, finalStacks, contributors })
   }
 
-  return Array.from(statMap.entries())
-    .map(([stat, { total, contributors }]) => ({ stat, total, contributors }))
-    .sort((a, b) => b.total - a.total)
+  return results
 }
 
 export interface TipEntry {

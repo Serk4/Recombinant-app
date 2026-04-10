@@ -18,6 +18,7 @@ function App() {
 	const [selected, setSelected] = useState<Modifier[]>([])
 	const [categoryFilter, setCategoryFilter] = useState<Category | 'All'>('All')
 	const [activeTab, setActiveTab] = useState<ActiveTab>('build')
+	const [appliedTipKey, setAppliedTipKey] = useState<string | null>(null)
 
 	const filteredModifiers = useMemo(() => {
 		if (categoryFilter === 'All') return ALL_MODIFIERS
@@ -53,6 +54,7 @@ function App() {
 
 	function clearAll() {
 		setSelected([])
+		setAppliedTipKey(null)
 	}
 
 	return (
@@ -67,7 +69,7 @@ function App() {
 								Recombinant
 							</h1>
 							<p className='text-[10px] text-gray-400 leading-tight'>
-								Division 2 · Rise Up Y8S1
+								Tom Clancy's The Division 2 · Rise Up Y8S1
 							</p>
 						</div>
 					</div>
@@ -103,14 +105,14 @@ function App() {
 				<div className='sticky top-[57px] z-10 bg-gray-950/95 backdrop-blur pt-3 pb-2'>
 					<div className='flex items-center justify-between mb-2'>
 						<span className='text-xs text-gray-400 font-medium'>
-							Selected Modifiers ({selected.length}/{MAX_SELECTED})
+							Selected Passive Modifiers ({selected.length}/{MAX_SELECTED})
 						</span>
 						{selected.length > 0 && (
 							<button
 								onClick={clearAll}
-								className='text-xs text-gray-500 hover:text-red-400 transition-colors'
+								className='text-xs font-semibold px-2.5 py-1 rounded-lg bg-red-900/30 hover:bg-red-800/50 text-red-400 hover:text-red-300 border border-red-700/40 hover:border-red-600/60 transition-colors'
 							>
-								Clear all
+								✕ Clear all
 							</button>
 						)}
 					</div>
@@ -148,7 +150,7 @@ function App() {
 						<section className='mt-4'>
 							<div className='flex items-center justify-between mb-3'>
 								<h2 className='text-sm font-bold text-gray-300 flex items-center gap-1.5'>
-									<span>🎮</span> Choose Modifiers
+									<span>🎮</span> Choose Passive Modifiers
 								</h2>
 								{selected.length < MAX_SELECTED && (
 									<span className='text-[11px] text-gray-500'>
@@ -201,7 +203,12 @@ function App() {
 						<h2 className='text-sm font-bold text-gray-300 mb-1 flex items-center gap-1.5'>
 							<span>💡</span> Best Combinations Guide
 						</h2>
-						<TipsPanel tips={tips} />
+						<TipsPanel
+							tips={tips}
+							selectedCount={selected.length}
+							appliedTipKey={appliedTipKey}
+							onApply={(mods, key) => { setSelected(mods); setAppliedTipKey(key) }}
+						/>
 					</section>
 				)}
 

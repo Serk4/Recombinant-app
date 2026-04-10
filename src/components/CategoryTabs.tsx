@@ -31,15 +31,15 @@ const TAB_ACTIVE: Record<string, string> = {
 
 export function CategoryTabs({ active, onChange }: CategoryTabsProps) {
 	return (
-		<div className='flex gap-2 overflow-x-auto pb-1 scrollbar-hide'>
+		<div className='flex gap-1.5 overflow-x-auto pb-1 px-0.5 pt-0.5 scrollbar-hide'>
 			{TABS.map((tab) => (
 				<button
 					key={tab}
 					onClick={() => onChange(tab)}
 					className={`
-            flex-shrink-0 px-4 py-2 rounded-lg text-sm font-semibold transition-all
+            flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all
             bg-gradient-to-br ${TAB_COLORS[tab]} text-white
-            ${active === tab ? `ring-2 ring-offset-2 ring-offset-gray-900 ${TAB_ACTIVE[tab]} scale-105` : 'opacity-70 hover:opacity-90'}
+            ${active === tab ? `ring-2 ring-inset ${TAB_ACTIVE[tab]} scale-105` : 'opacity-70 hover:opacity-90'}
           `}
 				>
 					{tab}

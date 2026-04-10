@@ -18,6 +18,13 @@ const SLOT_COLORS: Record<string, string> = {
 	Wildcard: 'border-green-500/60 bg-green-900/20',
 }
 
+const BADGE_COLORS: Record<string, string> = {
+	Offense: 'bg-red-600/20 text-red-300 border border-red-500/30',
+	Defense: 'bg-blue-600/20 text-blue-300 border border-blue-500/30',
+	Utility: 'bg-yellow-600/20 text-yellow-300 border border-yellow-500/30',
+	Wildcard: 'bg-green-600/20 text-green-300 border border-green-500/30',
+}
+
 export function SelectedSlot({
 	index,
 	modifier,
@@ -39,26 +46,35 @@ export function SelectedSlot({
 
 	return (
 		<div
-			className={`flex-1 min-w-[90px] rounded-xl border-2 ${SLOT_COLORS[modifier.category]} p-2 flex flex-col gap-1.5`}
+			className={`flex-1 min-w-[80px] rounded-xl border-2 ${SLOT_COLORS[modifier.category]} px-1.5 py-1.5 flex flex-col gap-1`}
 		>
-			<div className='flex items-center justify-between gap-1'>
-				<span className='text-xl'>{modifier.icon}</span>
+			{/* Top row: slot number + remove */}
+			<div className='flex items-center justify-between'>
+				<span className='w-4 h-4 rounded-full bg-white text-gray-900 text-[10px] font-bold flex items-center justify-center shadow'>
+					{index + 1}
+				</span>
 				<button
 					onClick={onRemove}
-					className='text-gray-400 hover:text-red-400 transition-colors text-sm leading-none p-0.5'
+					className='text-gray-400 hover:text-red-400 transition-colors text-xs leading-none p-0.5'
 					title='Remove modifier'
 				>
 					✕
 				</button>
 			</div>
 
-			<p className='text-xs font-semibold text-white leading-tight line-clamp-2'>
+			{/* Name + badge */}
+			<p className='text-[11px] font-semibold text-white leading-tight text-center'>
 				{modifier.name}
 			</p>
+			<span
+				className={`self-center text-[9px] px-1 py-0.5 rounded font-semibold ${BADGE_COLORS[modifier.category]}`}
+			>
+				{modifier.category}
+			</span>
 
 			{/* Reorder buttons */}
 			{total > 1 && (
-				<div className='flex gap-1'>
+				<div className='flex gap-1 mt-0.5'>
 					<button
 						onClick={onMoveUp}
 						disabled={isFirst}
@@ -77,8 +93,6 @@ export function SelectedSlot({
 					</button>
 				</div>
 			)}
-
-			<span className='text-[9px] text-gray-500 text-center'>#{index + 1}</span>
 		</div>
 	)
 }

@@ -195,7 +195,7 @@ const OFFENSE_MODIFIERS: Modifier[] = [
 const DEFENSE_MODIFIERS: Modifier[] = [
   {
     id: 'amplifyD',
-    name: 'Amplify (Defense)',
+    name: 'Amplify',
     category: 'Defense',
     description: 'Adds 5 Defense stacks with no change to contribution type.',
     stackChanges: [{ category: 'Defense', amount: 5 }],
@@ -208,7 +208,7 @@ const DEFENSE_MODIFIERS: Modifier[] = [
   },
   {
     id: 'consumeD',
-    name: 'Consume (Defense)',
+    name: 'Consume',
     category: 'Defense',
     description: 'Gains 10 Defense stacks by consuming 5 Offense and 5 Utility stacks.',
     stackChanges: [
@@ -225,7 +225,7 @@ const DEFENSE_MODIFIERS: Modifier[] = [
   },
   {
     id: 'saturateD',
-    name: 'Saturate (Defense)',
+    name: 'Saturate',
     category: 'Defense',
     description: 'Adds 25 Defense stacks, but they no longer contribute to stats.',
     stackChanges: [{ category: 'Defense', amount: 25 }],
@@ -237,7 +237,7 @@ const DEFENSE_MODIFIERS: Modifier[] = [
   },
   {
     id: 'compressD',
-    name: 'Compress (Defense)',
+    name: 'Compress',
     category: 'Defense',
     description: 'Removes 10 Defense stacks, but each remaining stack is 50% more potent.',
     stackChanges: [{ category: 'Defense', amount: -10 }],
@@ -249,7 +249,7 @@ const DEFENSE_MODIFIERS: Modifier[] = [
   },
   {
     id: 'convert1D',
-    name: 'Convert 1 (Defense)',
+    name: 'Convert 1',
     category: 'Defense',
     description: 'Defense stacks now provide Protection from Elites at ~1.125% per stack instead of Max Armor.',
     stackChanges: [],
@@ -262,7 +262,7 @@ const DEFENSE_MODIFIERS: Modifier[] = [
   },
   {
     id: 'convert2D',
-    name: 'Convert 2 (Defense)',
+    name: 'Convert 2',
     category: 'Defense',
     description: 'Defense stacks now provide Hazard Protection at ~1.5–2.25% per stack instead of Max Armor.',
     stackChanges: [],
@@ -275,7 +275,7 @@ const DEFENSE_MODIFIERS: Modifier[] = [
   },
   {
     id: 'splitD',
-    name: 'Split (Defense)',
+    name: 'Split',
     category: 'Defense',
     description: 'Redistributes 15 Defense stacks as 10 Offense and 10 Utility stacks.',
     stackChanges: [
@@ -291,7 +291,7 @@ const DEFENSE_MODIFIERS: Modifier[] = [
   },
   {
     id: 'pivotD',
-    name: 'Pivot (Defense)',
+    name: 'Pivot',
     category: 'Defense',
     description: 'Boosts the current lowest module using Defense stacks.',
     stackChanges: [],

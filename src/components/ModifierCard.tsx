@@ -87,15 +87,7 @@ export function ModifierCard({
 				</span>
 			)}
 
-			{/* Synergy indicator */}
-			{synergy && (
-				<span className='absolute top-2 left-2 text-[10px] bg-yellow-500 text-black px-1 rounded font-bold'>
-					SYNERGY
-				</span>
-			)}
-
 			<div className='flex items-start gap-2'>
-				<span className='text-2xl leading-none mt-0.5'>{modifier.icon}</span>
 				<div className='flex-1 min-w-0'>
 					<div className='flex items-center gap-2 flex-wrap'>
 						<span className='font-semibold text-sm text-white leading-tight'>
@@ -136,6 +128,15 @@ export function ModifierCard({
 									+{s.baseValue}% {s.stat.replace(/([A-Z])/g, ' $1').trim()}
 								</span>
 							))}
+						</div>
+					)}
+
+					{/* Synergy indicator */}
+					{synergy && (
+						<div className='flex justify-end mt-2'>
+							<span className='text-[10px] bg-yellow-500 text-black px-1.5 py-0.5 rounded font-bold'>
+								SYNERGY
+							</span>
 						</div>
 					)}
 				</div>
