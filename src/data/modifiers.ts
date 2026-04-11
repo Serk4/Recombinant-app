@@ -19,7 +19,7 @@ export const STAT_LABELS: Record<StatKey, string> = {
   weaponHandling: 'Weapon Handling',
   headshotDamage: 'Headshot Damage',
   magazineSize: 'Magazine Size',
-  totalArmor: 'Total Armor',
+  totalArmor: 'Max Armor',
   protectionFromElites: 'Protection from Elites',
   hazardProtection: 'Hazard Protection',
   skillDamage: 'Skill Damage',
