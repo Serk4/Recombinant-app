@@ -166,6 +166,27 @@ export function calculateStats(selectedModifiers: Modifier[]): StatResult[] {
       case 'pivot':
         // Quantitative amount is not well-defined; treated as a no-op.
         break
+
+      case 'invert': {
+        // Swap this category's stacks with the highest other category.
+        // Fails silently when this category is already the highest, or when
+        // the two other categories are tied for highest.
+        if (!modCat) break
+        const others = SIM_CATS.filter(c => c !== modCat)
+        const maxOther = Math.max(stacks[others[0]], stacks[others[1]])
+        // No-op if this category is already >= the max of the others
+        if (stacks[modCat] >= maxOther) break
+        // No-op if the two other categories are tied for highest
+        if (stacks[others[0]] === stacks[others[1]]) break
+        // Swap with the unique highest other category
+        const highestOther = stacks[others[0]] > stacks[others[1]] ? others[0] : others[1]
+        const tmp = stacks[modCat]
+        stacks[modCat] = stacks[highestOther]
+        stacks[highestOther] = tmp
+        addContributor(modCat, mod.name)
+        addContributor(highestOther, mod.name)
+        break
+      }
     }
   }
 
