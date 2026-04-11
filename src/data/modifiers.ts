@@ -44,7 +44,7 @@ export interface StackChange {
  * - convert     : stacks contribute to a different stat instead
  * - redistribute: stacks are moved to other categories
  */
-export type EffectType = 'none' | 'saturate' | 'compress' | 'convert' | 'redistribute' | 'pivot' | 'nullify' | 'cascade' | 'converge' | 'equalize'
+export type EffectType = 'none' | 'saturate' | 'compress' | 'convert' | 'redistribute' | 'pivot' | 'nullify' | 'cascade' | 'converge' | 'equalize' | 'invert'
 
 export interface ModifierStat {
   stat: StatKey
@@ -186,6 +186,18 @@ const OFFENSE_MODIFIERS: Modifier[] = [
     synergyWith: [],
     icon: '🔃',
   },
+  {
+    id: 'invertO',
+    name: 'Invert',
+    category: 'Offense',
+    description: 'Swap Offense stacks with the current highest module stacks. If Offense stacks are already the highest, or Defense and Utility stacks are tied for highest, nothing happens.',
+    stackChanges: [],
+    effectType: 'invert',
+    effectDescription: 'Swaps Offense stacks with the highest other module. Fails if Offense is already the highest, or if Defense and Utility are tied for highest.',
+    stats: [],
+    synergyWith: [],
+    icon: '🔀',
+  },
 ]
 
 // ─── DEFENSE ─────────────────────────────────────────────────────────────────
@@ -301,6 +313,18 @@ const DEFENSE_MODIFIERS: Modifier[] = [
     synergyWith: [],
     icon: '🔁',
   },
+  {
+    id: 'invertD',
+    name: 'Invert',
+    category: 'Defense',
+    description: 'Swap Defense stacks with the current highest module stacks. If Defense stacks are already the highest, or Offense and Utility stacks are tied for highest, nothing happens.',
+    stackChanges: [],
+    effectType: 'invert',
+    effectDescription: 'Swaps Defense stacks with the highest other module. Fails if Defense is already the highest, or if Offense and Utility are tied for highest.',
+    stats: [],
+    synergyWith: [],
+    icon: '🔀',
+  },
 ]
 
 // ─── UTILITY ─────────────────────────────────────────────────────────────────
@@ -410,6 +434,18 @@ const UTILITY_MODIFIERS: Modifier[] = [
     stats: [],
     synergyWith: [],
     icon: '🔃',
+  },
+  {
+    id: 'invertU',
+    name: 'Invert',
+    category: 'Utility',
+    description: 'Swap Utility stacks with the current highest module stacks. If Utility stacks are already the highest, or Offense and Defense stacks are tied for highest, nothing happens.',
+    stackChanges: [],
+    effectType: 'invert',
+    effectDescription: 'Swaps Utility stacks with the highest other module. Fails if Utility is already the highest, or if Offense and Defense are tied for highest.',
+    stats: [],
+    synergyWith: [],
+    icon: '🔀',
   },
 ]
 
