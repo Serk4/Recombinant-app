@@ -31,7 +31,7 @@ const BASE_STACKS: Record<SimCat, number> = {
 const STACK_RATES: Record<SimCat, Partial<Record<StatKey, number>>> = {
   Offense: { weaponHandling: 1, headshotDamage: 3, magazineSize: 1 },
   Defense: { totalArmor: 0.5, protectionFromElites: 1.125, hazardProtection: 2.25 },
-  Utility: { skillDamage: 1, statusEffects: 2, skillHaste: 1 },
+  Utility: { skillDamage: 1, skillRepair: 1, statusEffects: 1 },
 }
 
 /** Default stat produced by each category when no Convert modifier is active */

@@ -22,7 +22,7 @@ const STAT_CATEGORY: Record<StatKey, TipCategory> = {
 	hazardProtection: 'Defense',
 	skillDamage: 'Utility',
 	statusEffects: 'Utility',
-	skillHaste: 'Utility',
+	skillRepair: 'Utility',
 }
 
 const CARD_COLORS: Record<TipCategory, string> = {
