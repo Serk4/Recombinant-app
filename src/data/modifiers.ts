@@ -2,7 +2,7 @@
 // Values are based on in-game data for the Y8S1 season
 
 // Offense: weaponHandling (default, 1%/stack), headshotDamage (C1, 3%/stack), magazineSize (C2, 1%/stack)
-// Defense: totalArmor (default, 0.5%/stack), protectionFromElites (C1, 1.125%/stack), hazardProtection (C2, 2.25%/stack)
+// Defense: totalArmor (default, 0.5%/stack), protectionFromElites (C1, 1.125%/stack), hazardProtection (C2, 1.5%/stack)
 // Utility: skillDamage (default, 1%/stack), skillRepair (C1, 1%/stack), statusEffects (C2, 1%/stack)
 export type StatKey =
   | 'weaponHandling'
@@ -288,12 +288,12 @@ const DEFENSE_MODIFIERS: Modifier[] = [
     id: 'convert2D',
     name: 'Convert 2',
     category: 'Defense',
-    description: 'Defense stacks now provide Hazard Protection at ~1.5–2.25% per stack instead of Max Armor.',
+    description: 'Defense stacks now provide Hazard Protection at 1.5% per stack instead of Max Armor.',
     stackChanges: [],
     effectType: 'convert',
-    effectDescription: 'Defense → Hazard Protection (~1.5–2.25%/stack) instead of Max Armor.',
-    // ~2.25% per stack × ~20 base defense stacks
-    stats: [{ stat: 'hazardProtection', baseValue: 45, synergyBonus: 9 }],
+    effectDescription: 'Defense → Hazard Protection (1.5%/stack) instead of Max Armor.',
+    // ~1.5% per stack × ~20 base defense stacks
+    stats: [{ stat: 'hazardProtection', baseValue: 30, synergyBonus: 6 }],
     synergyWith: ['amplifyD', 'consumeD'],
     icon: '☢️',
   },
