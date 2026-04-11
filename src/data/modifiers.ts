@@ -44,7 +44,7 @@ export interface StackChange {
  * - convert     : stacks contribute to a different stat instead
  * - redistribute: stacks are moved to other categories
  */
-export type EffectType = 'none' | 'saturate' | 'compress' | 'convert' | 'redistribute' | 'pivot' | 'nullify' | 'cascade' | 'converge' | 'equalize' | 'invert'
+export type EffectType = 'none' | 'saturate' | 'compress' | 'convert' | 'redistribute' | 'pivot' | 'nullify' | 'cascade' | 'converge' | 'equalize' | 'invert' | 'stabilize'
 
 export interface ModifierStat {
   stat: StatKey
@@ -198,6 +198,18 @@ const OFFENSE_MODIFIERS: Modifier[] = [
     synergyWith: [],
     icon: '🔀',
   },
+  {
+    id: 'stabilizeO',
+    name: 'Stabilize',
+    category: 'Offense',
+    description: 'Offense stacks are locked and cannot change.',
+    stackChanges: [],
+    effectType: 'stabilize',
+    effectDescription: 'Offense stacks are frozen at their current value; all subsequent changes to Offense stacks are ignored.',
+    stats: [],
+    synergyWith: ['amplify', 'consume'],
+    icon: '🔒',
+  },
 ]
 
 // ─── DEFENSE ─────────────────────────────────────────────────────────────────
@@ -325,6 +337,18 @@ const DEFENSE_MODIFIERS: Modifier[] = [
     synergyWith: [],
     icon: '🔀',
   },
+  {
+    id: 'stabilizeD',
+    name: 'Stabilize',
+    category: 'Defense',
+    description: 'Defense stacks are locked and cannot change.',
+    stackChanges: [],
+    effectType: 'stabilize',
+    effectDescription: 'Defense stacks are frozen at their current value; all subsequent changes to Defense stacks are ignored.',
+    stats: [],
+    synergyWith: ['amplifyD', 'consumeD'],
+    icon: '🔒',
+  },
 ]
 
 // ─── UTILITY ─────────────────────────────────────────────────────────────────
@@ -446,6 +470,18 @@ const UTILITY_MODIFIERS: Modifier[] = [
     stats: [],
     synergyWith: [],
     icon: '🔀',
+  },
+  {
+    id: 'stabilizeU',
+    name: 'Stabilize',
+    category: 'Utility',
+    description: 'Utility stacks are locked and cannot change.',
+    stackChanges: [],
+    effectType: 'stabilize',
+    effectDescription: 'Utility stacks are frozen at their current value; all subsequent changes to Utility stacks are ignored.',
+    stats: [],
+    synergyWith: ['amplifyU', 'consumeU'],
+    icon: '🔒',
   },
 ]
 

@@ -57,6 +57,8 @@ export function calculateStats(selectedModifiers: Modifier[]): StatResult[] {
   const potency: Record<SimCat, number> = { Offense: 1, Defense: 1, Utility: 1 }
   /** Category whose stacks are disabled and contribute nothing to stats */
   const disabled: Record<SimCat, boolean> = { Offense: false, Defense: false, Utility: false }
+  /** Category whose stacks are locked and cannot be changed by subsequent modifiers */
+  const locked: Record<SimCat, boolean> = { Offense: false, Defense: false, Utility: false }
   /** Override which stat a category's stacks produce (from Convert modifiers) */
   const convertStat: Partial<Record<SimCat, StatKey>> = {}
   /** Names of modifiers that actively influenced each category */
@@ -78,6 +80,7 @@ export function calculateStats(selectedModifiers: Modifier[]): StatResult[] {
     for (const change of mod.stackChanges) {
       if (!(SIM_CATS as string[]).includes(change.category)) continue
       const cat = change.category as SimCat
+      if (locked[cat]) continue
       stacks[cat] += change.amount
       if (change.amount > 0) addContributor(cat, mod.name)
     }
@@ -113,15 +116,26 @@ export function calculateStats(selectedModifiers: Modifier[]): StatResult[] {
         if (modCat) disabled[modCat] = true
         break
 
+      case 'stabilize':
+        // Lock this category's stacks at their current value.
+        // All subsequent stack changes targeting this category are ignored.
+        if (modCat) {
+          locked[modCat] = true
+          addContributor(modCat, mod.name)
+        }
+        break
+
       case 'nullify': {
         // Reverses net changes on the *current* lowest category.
-        // Fails silently when two or more categories share the minimum.
+        // Fails silently when two or more categories share the minimum or the category is locked.
         const sorted = [...SIM_CATS].sort((a, b) => total(a) - total(b))
         if (total(sorted[0]) < total(sorted[1])) {
           const minCat = sorted[0]
-          const delta = stacks[minCat] - BASE_STACKS[minCat]
-          stacks[minCat] = Math.max(0, BASE_STACKS[minCat] - delta)
-          addContributor(minCat, mod.name)
+          if (!locked[minCat]) {
+            const delta = stacks[minCat] - BASE_STACKS[minCat]
+            stacks[minCat] = Math.max(0, BASE_STACKS[minCat] - delta)
+            addContributor(minCat, mod.name)
+          }
         }
         break
       }
@@ -133,10 +147,14 @@ export function calculateStats(selectedModifiers: Modifier[]): StatResult[] {
         if (total(sorted[0]) > total(sorted[1])) {
           const half = Math.ceil(stacks[sorted[0]] / 2)
           disabled[sorted[0]] = true
-          stacks[sorted[1]] += half
-          stacks[sorted[2]] += half
-          addContributor(sorted[1], mod.name)
-          addContributor(sorted[2], mod.name)
+          if (!locked[sorted[1]]) {
+            stacks[sorted[1]] += half
+            addContributor(sorted[1], mod.name)
+          }
+          if (!locked[sorted[2]]) {
+            stacks[sorted[2]] += half
+            addContributor(sorted[2], mod.name)
+          }
         }
         break
       }
@@ -144,22 +162,28 @@ export function calculateStats(selectedModifiers: Modifier[]): StatResult[] {
       case 'converge': {
         // Lowest category = average of the other two; the other two drop to 0.
         // Fails silently when two or more categories share the minimum.
+        // Locked categories are not modified.
         const sorted = [...SIM_CATS].sort((a, b) => total(a) - total(b))
         if (total(sorted[0]) < total(sorted[1])) {
           const avg = Math.floor((stacks[sorted[1]] + stacks[sorted[2]]) / 2)
-          stacks[sorted[0]] = avg
-          stacks[sorted[1]] = 0
-          stacks[sorted[2]] = 0
-          addContributor(sorted[0], mod.name)
+          if (!locked[sorted[0]]) {
+            stacks[sorted[0]] = avg
+            addContributor(sorted[0], mod.name)
+          }
+          if (!locked[sorted[1]]) stacks[sorted[1]] = 0
+          if (!locked[sorted[2]]) stacks[sorted[2]] = 0
         }
         break
       }
 
       case 'equalize': {
         // All categories are set to the median stack value.
+        // Locked categories are not modified.
         const sorted = [...SIM_CATS].sort((a, b) => total(a) - total(b))
         const median = stacks[sorted[1]]
-        for (const c of SIM_CATS) stacks[c] = median
+        for (const c of SIM_CATS) {
+          if (!locked[c]) stacks[c] = median
+        }
         break
       }
 
@@ -169,8 +193,9 @@ export function calculateStats(selectedModifiers: Modifier[]): StatResult[] {
 
       case 'invert': {
         // Swap this category's stacks with the highest other category.
-        // Fails silently when this category is already the highest, or when
-        // the two other categories are tied for highest.
+        // Fails silently when this category is already the highest, when
+        // the two other categories are tied for highest, or when either
+        // involved category is locked.
         if (!modCat) break
         const others = SIM_CATS.filter(c => c !== modCat)
         const maxOther = Math.max(stacks[others[0]], stacks[others[1]])
@@ -178,8 +203,10 @@ export function calculateStats(selectedModifiers: Modifier[]): StatResult[] {
         if (stacks[modCat] >= maxOther) break
         // No-op if the two other categories are tied for highest
         if (stacks[others[0]] === stacks[others[1]]) break
-        // Swap with the unique highest other category
+        // Identify the unique highest other category
         const highestOther = stacks[others[0]] > stacks[others[1]] ? others[0] : others[1]
+        // No-op if either involved category is locked
+        if (locked[modCat] || locked[highestOther]) break
         const tmp = stacks[modCat]
         stacks[modCat] = stacks[highestOther]
         stacks[highestOther] = tmp
