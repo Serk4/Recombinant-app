@@ -1,5 +1,6 @@
 import type { Modifier } from '../data/modifiers'
 import type { StackChange } from '../data/modifiers'
+import { STAT_LABELS } from '../data/modifiers'
 import { hasSynergy } from '../utils/calculator'
 
 function StackBadge({ change }: { change: StackChange }) {
@@ -125,7 +126,7 @@ export function ModifierCard({
 									key={s.stat}
 									className='text-[11px] bg-gray-700/60 text-gray-300 px-1.5 py-0.5 rounded'
 								>
-									+{s.baseValue}% {s.stat.replace(/([A-Z])/g, ' $1').trim()}
+									+{s.baseValue}% {STAT_LABELS[s.stat]}
 								</span>
 							))}
 						</div>
