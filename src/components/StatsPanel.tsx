@@ -15,7 +15,7 @@ const STAT_ICONS: Record<StatKey, string> = {
 	hazardProtection: '☢️',
 	skillDamage: '🔮',
 	statusEffects: '🔥',
-	skillHaste: '⚡',
+	skillRepair: '🩹',
 }
 
 const CATEGORY_HEADER: Record<

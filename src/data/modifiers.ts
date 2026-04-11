@@ -2,8 +2,8 @@
 // Values are based on in-game data for the Y8S1 season
 
 // Offense: weaponHandling (default, 1%/stack), headshotDamage (C1, 3%/stack), magazineSize (C2, 1%/stack)
-// Defense: totalArmor (default, 0.5%/stack), protectionFromElites (C1, 0.5%/stack), hazardProtection (C2, 1%/stack)
-// Utility: skillDamage (default, 1%/stack), statusEffects (confirmed Utility attribute), skillHaste (possible Utility C2 – TBD)
+// Defense: totalArmor (default, 0.5%/stack), protectionFromElites (C1, 1.125%/stack), hazardProtection (C2, 2.25%/stack)
+// Utility: skillDamage (default, 1%/stack), skillRepair (C1, 1%/stack), statusEffects (C2, 1%/stack)
 export type StatKey =
   | 'weaponHandling'
   | 'headshotDamage'
@@ -13,7 +13,7 @@ export type StatKey =
   | 'hazardProtection'
   | 'skillDamage'
   | 'statusEffects'
-  | 'skillHaste'
+  | 'skillRepair'
 
 export const STAT_LABELS: Record<StatKey, string> = {
   weaponHandling: 'Weapon Handling',
@@ -24,7 +24,7 @@ export const STAT_LABELS: Record<StatKey, string> = {
   hazardProtection: 'Hazard Protection',
   skillDamage: 'Skill Damage',
   statusEffects: 'Status Effects',
-  skillHaste: 'Skill Haste',
+  skillRepair: 'Skill Repair',
 }
 
 export type Category = 'Offense' | 'Defense' | 'Utility' | 'Wildcard'
@@ -387,25 +387,25 @@ const UTILITY_MODIFIERS: Modifier[] = [
     id: 'convert1U',
     name: 'Convert 1',
     category: 'Utility',
-    description: 'Utility stacks now provide Status Effects (Damage & Duration) instead of Skill Damage.',
+    description: 'Utility stacks now provide Skill Repair at 1% per stack instead of Skill Damage.',
     stackChanges: [],
     effectType: 'convert',
-    effectDescription: 'Utility → Status Effects (Damage & Duration) instead of Skill Damage',
-    stats: [{ stat: 'statusEffects', baseValue: 20, synergyBonus: 5 }],
+    effectDescription: 'Utility → Skill Repair (1%/stack) instead of Skill Damage',
+    stats: [{ stat: 'skillRepair', baseValue: 20, synergyBonus: 5 }],
     synergyWith: ['amplifyU', 'consumeU'],
-    icon: '☣️',
+    icon: '🩹',
   },
   {
     id: 'convert2U',
     name: 'Convert 2',
     category: 'Utility',
-    description: 'Utility stacks now provide Skill Haste / Cooldown Reduction instead of Skill Damage.',
+    description: 'Utility stacks now provide Status Effects at 1% per stack instead of Skill Damage.',
     stackChanges: [],
     effectType: 'convert',
-    effectDescription: 'Utility → Skill Haste / Cooldown Reduction instead of Skill Damage',
-    stats: [{ stat: 'skillHaste', baseValue: 10, synergyBonus: 2 }],
+    effectDescription: 'Utility → Status Effects (1%/stack) instead of Skill Damage',
+    stats: [{ stat: 'statusEffects', baseValue: 20, synergyBonus: 5 }],
     synergyWith: ['amplifyU', 'consumeU'],
-    icon: '⏱️',
+    icon: '☣️',
   },
   {
     id: 'splitU',
