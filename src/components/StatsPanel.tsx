@@ -89,7 +89,7 @@ export function StatsPanel({ stats }: StatsPanelProps) {
 								<span
 									className={`font-bold ${isZero ? 'text-gray-500' : 'text-white'}`}
 								>
-									+{total.toFixed(0)}%
+									+{Number.isInteger(total) ? total.toFixed(0) : total.toFixed(1)}%
 								</span>
 							</div>
 

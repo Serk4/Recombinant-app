@@ -30,7 +30,7 @@ const BASE_STACKS: Record<SimCat, number> = {
  */
 const STACK_RATES: Record<SimCat, Partial<Record<StatKey, number>>> = {
   Offense: { weaponHandling: 1, headshotDamage: 3, magazineSize: 1 },
-  Defense: { totalArmor: 0.5, protectionFromElites: 1.125, hazardProtection: 2.25 },
+  Defense: { totalArmor: 0.5, protectionFromElites: 1.125, hazardProtection: 1.5 },
   Utility: { skillDamage: 1, skillRepair: 1, statusEffects: 1 },
 }
 
@@ -128,12 +128,15 @@ export function calculateStats(selectedModifiers: Modifier[]): StatResult[] {
       case 'nullify': {
         // Reverses net changes on the *current* lowest category.
         // Fails silently when two or more categories share the minimum or the category is locked.
+        // "All previous value changes" includes potency changes (e.g. from Compress), so those
+        // are also reversed by resetting potency back to 1.
         const sorted = [...SIM_CATS].sort((a, b) => total(a) - total(b))
         if (total(sorted[0]) < total(sorted[1])) {
           const minCat = sorted[0]
           if (!locked[minCat]) {
             const delta = stacks[minCat] - BASE_STACKS[minCat]
             stacks[minCat] = Math.max(0, BASE_STACKS[minCat] - delta)
+            potency[minCat] = 1
             addContributor(minCat, mod.name)
           }
         }
