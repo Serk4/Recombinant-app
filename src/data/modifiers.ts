@@ -279,7 +279,7 @@ const DEFENSE_MODIFIERS: Modifier[] = [
     stackChanges: [],
     effectType: 'convert',
     effectDescription: 'Defense → Protection from Elites (0.75%/stack) instead of Max Armor. Best with 30 stacks (e.g. with Consume or Compress+Nullify) = 22.5% PFE.',
-    // ~1.125% per stack × ~20 base defense stacks
+    // 0.75% per stack × 30 stacks (e.g. with Consume or Compress+Nullify) = 22.5% PFE
     stats: [{ stat: 'protectionFromElites', baseValue: 22.5, synergyBonus: 4.5 }],
     synergyWith: ['amplifyD', 'consumeD', 'saturateD'],
     icon: '⭐',
