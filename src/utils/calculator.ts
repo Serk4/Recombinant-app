@@ -30,7 +30,7 @@ const BASE_STACKS: Record<SimCat, number> = {
  */
 const STACK_RATES: Record<SimCat, Partial<Record<StatKey, number>>> = {
   Offense: { weaponHandling: 1, headshotDamage: 3, magazineSize: 1 },
-  Defense: { totalArmor: 0.5, protectionFromElites: 1.125, hazardProtection: 1.5 },
+  Defense: { totalArmor: 0.5, protectionFromElites: 0.5, hazardProtection: 1 },
   Utility: { skillDamage: 1, skillRepair: 1, statusEffects: 1 },
 }
 
