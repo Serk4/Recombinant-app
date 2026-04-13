@@ -278,8 +278,8 @@ const DEFENSE_MODIFIERS: Modifier[] = [
     description: 'Defense stacks now provide Protection from Elites at 0.5% per stack instead of Max Armor.',
     stackChanges: [],
     effectType: 'convert',
-    effectDescription: 'Defense → Protection from Elites (0.5%/stack base, 0.75%/stack with Compress+Nullify) instead of Max Armor. Best with Compress+Nullify (30 stacks × 1.5 potency) = 22.5% PFE.',
-    // 0.5% per stack × 20 base defense stacks = 10% PFE (base); 0.5% × 1.5 potency × 30 stacks (Compress+Nullify) = 22.5% PFE
+    effectDescription: 'Defense → Protection from Elites (0.5%/stack base, 0.75%/stack with Compress+Nullify) instead of Max Armor. Best with Compress+Nullify (30 stacks × 1.5 potency) = 22.5% Protection from Elites.',
+    // 0.5% per stack × 20 base defense stacks = 10% Protection from Elites (base); 0.5% × 1.5 potency × 30 stacks (Compress+Nullify) = 22.5% Protection from Elites
     stats: [{ stat: 'protectionFromElites', baseValue: 10, synergyBonus: 4.5 }],
     synergyWith: ['amplifyD', 'consumeD', 'saturateD', 'compressD'],
     icon: '⭐',
@@ -292,7 +292,7 @@ const DEFENSE_MODIFIERS: Modifier[] = [
     stackChanges: [],
     effectType: 'convert',
     effectDescription: 'Defense → Hazard Protection (1%/stack base, 1.5%/stack with Compress) instead of Max Armor.',
-    // ~1% per stack × ~20 base defense stacks; 1.5%/stack with Compress active
+    // 1% per stack × 20 base defense stacks = 20% Hazard Protection (base); 1.5%/stack with Compress active (1% × 1.5 potency = 1.5%, giving up to 30% with 20 stacks)
     stats: [{ stat: 'hazardProtection', baseValue: 20, synergyBonus: 6 }],
     synergyWith: ['amplifyD', 'consumeD', 'compressD'],
     icon: '☢️',
