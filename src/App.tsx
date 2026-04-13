@@ -18,7 +18,7 @@ function App() {
 	const [selected, setSelected] = useState<Modifier[]>([])
 	const [categoryFilter, setCategoryFilter] = useState<Category | 'All'>('All')
 	const [activeTab, setActiveTab] = useState<ActiveTab>('build')
-	const [appliedTipKey, setAppliedTipKey] = useState<string | null>(null)
+	const [appliedTip, setAppliedTip] = useState<{ statKey: string; comboIndex: number } | null>(null)
 
 	const filteredModifiers = useMemo(() => {
 		if (categoryFilter === 'All') return ALL_MODIFIERS
@@ -54,7 +54,7 @@ function App() {
 
 	function clearAll() {
 		setSelected([])
-		setAppliedTipKey(null)
+		setAppliedTip(null)
 	}
 
 	return (
@@ -206,8 +206,8 @@ function App() {
 						<TipsPanel
 							tips={tips}
 							selectedCount={selected.length}
-							appliedTipKey={appliedTipKey}
-							onApply={(mods, key) => { setSelected(mods); setAppliedTipKey(key) }}
+							appliedTip={appliedTip}
+							onApply={(mods, statKey, comboIndex) => { setSelected(mods); setAppliedTip({ statKey, comboIndex }) }}
 						/>
 					</section>
 				)}

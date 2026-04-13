@@ -7,8 +7,8 @@ import type { StatKey } from '../data/modifiers'
 interface TipsPanelProps {
 	tips: TipEntry[]
 	selectedCount: number
-	appliedTipKey: string | null
-	onApply: (modifiers: Modifier[], key: string) => void
+	appliedTip: { statKey: string; comboIndex: number } | null
+	onApply: (modifiers: Modifier[], statKey: string, comboIndex: number) => void
 }
 
 type TipCategory = 'All' | 'Offense' | 'Defense' | 'Utility'
@@ -58,7 +58,7 @@ const TAB_ACTIVE: Record<TipCategory, string> = {
 export function TipsPanel({
 	tips,
 	selectedCount,
-	appliedTipKey,
+	appliedTip,
 	onApply,
 }: TipsPanelProps) {
 	const [expanded, setExpanded] = useState(false)
@@ -109,8 +109,14 @@ export function TipsPanel({
 						tip={tip}
 						rank={i + 1}
 						selectedCount={selectedCount}
-						applied={appliedTipKey === tip.statKey}
-						onApply={(mods) => onApply(mods, tip.statKey)}
+						appliedComboIndex={
+							appliedTip?.statKey === tip.statKey
+								? appliedTip.comboIndex
+								: null
+						}
+						onApply={(mods, comboIndex) =>
+							onApply(mods, tip.statKey, comboIndex)
+						}
 					/>
 				))
 			)}
@@ -131,14 +137,14 @@ function TipCard({
 	tip,
 	rank,
 	selectedCount,
-	applied,
+	appliedComboIndex,
 	onApply,
 }: {
 	tip: TipEntry
 	rank: number
-	applied: boolean
+	appliedComboIndex: number | null
 	selectedCount: number
-	onApply: (modifiers: Modifier[]) => void
+	onApply: (modifiers: Modifier[], comboIndex: number) => void
 }) {
 	const [confirming, setConfirming] = useState<number | null>(null)
 
@@ -146,12 +152,12 @@ function TipCard({
 		if (selectedCount > 0) {
 			setConfirming(comboIndex)
 		} else {
-			onApply(tip.allCombos[comboIndex])
+			onApply(tip.allCombos[comboIndex], comboIndex)
 		}
 	}
 
 	function handleConfirm(comboIndex: number) {
-		onApply(tip.allCombos[comboIndex])
+		onApply(tip.allCombos[comboIndex], comboIndex)
 		setConfirming(null)
 	}
 
@@ -170,23 +176,23 @@ function TipCard({
 
 	return (
 		<div
-			className={`border rounded-xl px-2.5 py-1.5 ${CARD_COLORS[tipCategory]}`}
+			className={`border rounded-xl px-4 py-3 ${CARD_COLORS[tipCategory]}`}
 		>
 			{/* Header row: rank + stat + badge + value + applied check */}
-			<div className='flex items-center gap-1.5 flex-wrap'>
-				<span className='text-[10px] font-bold text-gray-500'>#{rank}</span>
-				<span className='text-[11px] font-semibold text-white'>
+			<div className='flex items-center gap-2 flex-wrap'>
+				<span className='text-xs font-bold text-gray-500'>#{rank}</span>
+				<span className='text-sm font-semibold text-white'>
 					Best {STAT_LABELS[tip.statKey]}
 				</span>
 				<span
-					className={`text-[9px] px-1 py-0.5 rounded font-semibold ${BADGE_COLORS[tipCategory]}`}
+					className={`text-[10px] px-1.5 py-0.5 rounded font-semibold ${BADGE_COLORS[tipCategory]}`}
 				>
 					{tipCategory}
 				</span>
-				<span className='text-[11px] font-bold text-green-400'>
+				<span className='text-sm font-bold text-green-400'>
 					+{displayValue}%
 				</span>
-				{applied && (
+				{appliedComboIndex !== null && (
 					<span className='ml-auto flex items-center justify-center w-7 h-7 rounded-full bg-green-700/40 text-green-400 text-sm font-bold'>
 						✓
 					</span>
@@ -194,62 +200,67 @@ function TipCard({
 			</div>
 
 			{/* Combo rows — one per tied best combination */}
-			<div className='mt-1 space-y-1'>
-				{combos.map((combo, comboIdx) => (
-					<div
-						key={comboIdx}
-						className='flex items-center justify-between gap-2'
-					>
-						<div className='flex flex-wrap items-center gap-1'>
-							{combo.map((m, idx) => (
-								<span key={m.id} className='flex items-center gap-1'>
-									{idx > 0 && (
-										<span className='text-gray-600 text-[10px]'>→</span>
-									)}
-									<span
-										className={`text-[11px] font-medium ${categoryColors[m.category]}`}
-									>
-										{m.name}
+			<div className='mt-2 space-y-2'>
+				{combos.map((combo, comboIdx) => {
+					const isApplied = appliedComboIndex === comboIdx
+					return (
+						<div
+							key={comboIdx}
+							className='flex items-center justify-between gap-3'
+						>
+							<div className='flex flex-wrap items-center gap-1.5'>
+								{combo.map((m, idx) => (
+									<span key={m.id} className='flex items-center gap-1'>
+										{idx > 0 && (
+											<span className='text-gray-600 text-xs'>→</span>
+										)}
+										<span
+											className={`text-xs font-medium ${categoryColors[m.category]}`}
+										>
+											{m.name}
+										</span>
 									</span>
-								</span>
-							))}
-						</div>
+								))}
+							</div>
 
-						{!applied && (
-							<div className='flex-shrink-0 flex items-center gap-1'>
-								{confirming !== comboIdx ? (
+							<div className='flex-shrink-0 flex items-center gap-1.5'>
+								{isApplied ? (
+									<span className='flex items-center justify-center w-9 h-9 rounded-full bg-green-700/40 text-green-400 text-base font-bold'>
+										✓
+									</span>
+								) : confirming !== comboIdx ? (
 									<button
 										onClick={() => handleApplyClick(comboIdx)}
 										aria-label='Apply tip'
-										className='flex items-center justify-center w-7 h-7 rounded-full bg-gray-700 hover:bg-gray-600 text-white text-lg font-bold leading-none transition-all hover:scale-110 active:scale-95'
+										className='flex items-center justify-center w-9 h-9 rounded-full bg-gray-700 hover:bg-gray-600 text-white text-xl font-bold leading-none transition-all hover:scale-110 active:scale-95'
 									>
 										+
 									</button>
 								) : (
 									<>
-										<span className='text-[9px] text-yellow-400 whitespace-nowrap'>
+										<span className='text-[10px] text-yellow-400 whitespace-nowrap'>
 											Replace?
 										</span>
 										<button
 											onClick={() => handleConfirm(comboIdx)}
 											aria-label='Confirm apply'
-											className='flex items-center justify-center w-6 h-6 rounded-full bg-green-700 hover:bg-green-600 text-white text-xs font-bold transition-colors'
+											className='flex items-center justify-center w-8 h-8 rounded-full bg-green-700 hover:bg-green-600 text-white text-sm font-bold transition-colors'
 										>
 											✓
 										</button>
 										<button
 											onClick={() => setConfirming(null)}
 											aria-label='Cancel apply'
-											className='flex items-center justify-center w-6 h-6 rounded-full bg-gray-600 hover:bg-gray-500 text-white text-xs font-bold transition-colors'
+											className='flex items-center justify-center w-8 h-8 rounded-full bg-gray-600 hover:bg-gray-500 text-white text-sm font-bold transition-colors'
 										>
 											✕
 										</button>
 									</>
 								)}
 							</div>
-						)}
-					</div>
-				))}
+						</div>
+					)
+				})}
 			</div>
 		</div>
 	)
