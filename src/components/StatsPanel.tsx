@@ -70,12 +70,6 @@ const styles = {
 		fontSize: '0.875rem',
 		lineHeight: 1,
 	} as CSSProperties,
-	bonusPctZero: {
-		color: ORANGE_ACCENT,
-		fontWeight: 700,
-		fontSize: '0.875rem',
-		lineHeight: 1,
-	} as CSSProperties,
 	effectLabel: {
 		color: '#ffffff',
 		fontWeight: 500,
@@ -141,9 +135,7 @@ export function StatsPanel({ stats }: StatsPanelProps) {
 									<span style={styles.stackCurrent}>{finalStacks}</span>
 									<span style={styles.stackBase}>[{BASE_STACKS}]</span>
 								</span>
-								<span style={isZero ? styles.bonusPctZero : styles.bonusPct}>
-									+{totalStr}%
-								</span>
+								<span style={styles.bonusPct}>+{totalStr}%</span>
 								<span style={styles.effectLabel}>{STAT_LABELS[stat]}</span>
 								{effectiveRate > 0 && (
 									<span style={styles.rateLabel}>({rateStr}% per stack)</span>
