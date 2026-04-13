@@ -330,6 +330,58 @@ export function generateTips(): TipEntry[] {
   return tips.sort((a, b) => b.totalValue - a.totalValue)
 }
 
+/** A single entry in the priority-purchase ranking */
+export interface ModifierPriorityEntry {
+  modifier: Modifier
+  /** The distinct stat keys for which this modifier appears in a best combo */
+  statsCovered: StatKey[]
+  /** Sum of best-combo tip values across all covered stats (used as tiebreaker) */
+  totalValue: number
+}
+
+/**
+ * Rank all modifiers by multi-purpose versatility.
+ * A modifier scores higher the more distinct stats it appears in across the
+ * best-combination tips.  Ties are broken by the accumulated tip value.
+ * Returns at most 20 entries, already sorted best-first.
+ */
+export function rankModifiersByVersatility(tips: TipEntry[]): ModifierPriorityEntry[] {
+  const modData = new Map<
+    string,
+    { modifier: Modifier; stats: Set<StatKey>; totalValue: number }
+  >()
+
+  for (const tip of tips) {
+    // Count each modifier at most once per tip (regardless of how many combos it appears in)
+    const seenInTip = new Set<string>()
+    for (const combo of tip.allCombos) {
+      for (const mod of combo) {
+        if (seenInTip.has(mod.id)) continue
+        seenInTip.add(mod.id)
+        if (!modData.has(mod.id)) {
+          modData.set(mod.id, { modifier: mod, stats: new Set(), totalValue: 0 })
+        }
+        const entry = modData.get(mod.id)!
+        entry.stats.add(tip.statKey)
+        entry.totalValue += tip.totalValue
+      }
+    }
+  }
+
+  return Array.from(modData.values())
+    .map(({ modifier, stats, totalValue }) => ({
+      modifier,
+      statsCovered: Array.from(stats),
+      totalValue,
+    }))
+    .sort((a, b) => {
+      const diff = b.statsCovered.length - a.statsCovered.length
+      if (diff !== 0) return diff
+      return b.totalValue - a.totalValue
+    })
+    .slice(0, 20)
+}
+
 /** Determine if a modifier is synergistic with the current selection */
 export function hasSynergy(modifier: Modifier, selected: Modifier[]): boolean {
   return selected.some(
