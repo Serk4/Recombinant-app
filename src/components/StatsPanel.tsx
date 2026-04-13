@@ -1,4 +1,5 @@
-import type { StatResult, SimCat } from '../utils/calculator'
+import type { CSSProperties } from 'react'
+import type { StatResult } from '../utils/calculator'
 import { STAT_LABELS } from '../data/modifiers'
 import type { StatKey } from '../data/modifiers'
 
@@ -6,108 +7,155 @@ interface StatsPanelProps {
 	stats: StatResult[]
 }
 
-const STAT_ICONS: Record<StatKey, string> = {
-	weaponHandling: '🔫',
-	headshotDamage: '🎯',
-	magazineSize: '🔋',
-	totalArmor: '🛡️',
-	protectionFromElites: '⭐',
-	hazardProtection: '☢️',
-	skillDamage: '🔮',
-	statusEffects: '🔥',
-	skillRepair: '🩹',
+const BASE_STACKS = 20
+
+const STAT_RATE: Record<StatKey, number> = {
+	weaponHandling: 1,
+	headshotDamage: 3,
+	magazineSize: 1,
+	totalArmor: 0.5,
+	protectionFromElites: 0.5,
+	hazardProtection: 1,
+	skillDamage: 1,
+	statusEffects: 1,
+	skillRepair: 1,
 }
 
-const CATEGORY_HEADER: Record<
-	SimCat,
-	{ color: string; border: string; icon: string }
-> = {
-	Offense: { color: 'text-red-400', border: 'border-red-500/30', icon: '⚔️' },
-	Defense: { color: 'text-blue-400', border: 'border-blue-500/30', icon: '🛡️' },
-	Utility: {
-		color: 'text-yellow-400',
-		border: 'border-yellow-500/30',
-		icon: '🔧',
-	},
-}
-
-const CATEGORY_BAR: Record<SimCat, string> = {
-	Offense: 'from-red-400 to-red-700',
-	Defense: 'from-blue-400 to-blue-700',
-	Utility: 'from-yellow-300 to-amber-600',
+const styles = {
+	panel: {
+		background: '#0a0a0a',
+		padding: '0.75rem',
+		fontFamily: 'inherit',
+	} as CSSProperties,
+	warning: {
+		fontSize: '0.625rem',
+		color: '#6b7280',
+		marginBottom: '0.875rem',
+		lineHeight: '1.5',
+	} as CSSProperties,
+	warningIcon: {
+		color: '#FF6200',
+	} as CSSProperties,
+	warningBold: {
+		color: '#9ca3af',
+		fontWeight: 600,
+	} as CSSProperties,
+	blocks: {
+		display: 'flex',
+		flexDirection: 'column',
+		gap: '0.75rem',
+	} as CSSProperties,
+	categoryTitle: {
+		color: '#FF6200',
+		fontWeight: 700,
+		fontSize: '0.6875rem',
+		textTransform: 'uppercase',
+		letterSpacing: '0.1em',
+		marginBottom: '0.1875rem',
+	} as CSSProperties,
+	stacksLine: {
+		color: '#9ca3af',
+		fontWeight: 500,
+		fontSize: '0.75rem',
+		marginBottom: '0.125rem',
+	} as CSSProperties,
+	bonusLine: {
+		display: 'flex',
+		alignItems: 'baseline',
+		gap: '0.375rem',
+		marginBottom: '0.125rem',
+	} as CSSProperties,
+	bonusPct: {
+		color: '#ffffff',
+		fontWeight: 700,
+		fontSize: '1.375rem',
+		lineHeight: 1,
+	} as CSSProperties,
+	bonusPctZero: {
+		color: '#4b5563',
+		fontWeight: 700,
+		fontSize: '1.375rem',
+		lineHeight: 1,
+	} as CSSProperties,
+	effectLabel: {
+		color: '#c2843a',
+		fontWeight: 500,
+		fontSize: '0.6875rem',
+		fontVariant: 'small-caps',
+	} as CSSProperties,
+	rateLabel: {
+		color: '#4b5563',
+		fontSize: '0.5625rem',
+		marginTop: '0.0625rem',
+	} as CSSProperties,
+	empty: {
+		color: '#6b7280',
+		textAlign: 'center',
+		padding: '2rem 0',
+		fontSize: '0.875rem',
+	} as CSSProperties,
+	emptyIcon: {
+		fontSize: '1.875rem',
+		display: 'block',
+		marginBottom: '0.5rem',
+	} as CSSProperties,
 }
 
 export function StatsPanel({ stats }: StatsPanelProps) {
 	if (stats.length === 0) {
 		return (
-			<div className='text-center text-gray-500 py-8 text-sm'>
-				<span className='text-3xl block mb-2'>📊</span>
+			<div style={styles.empty}>
+				<span style={styles.emptyIcon}>📊</span>
 				Select up to 3 modifiers to see combined stats
 			</div>
 		)
 	}
 
-	const maxVal = Math.max(...stats.map((s) => s.total), 1)
-
 	return (
-		<div className='space-y-4'>
-			{/* Baseline disclaimer */}
-			<p className='text-[10px] text-gray-500 italic border border-gray-700/40 rounded-lg px-2.5 py-1.5'>
-				⚠️ Calculations assume{' '}
-				<span className='text-gray-400 font-semibold'>20 base stacks</span> per
-				module (fully upgraded). Results will differ with lower-tier modules.
+		<div style={styles.panel}>
+			{/* Warning header */}
+			<p style={styles.warning}>
+				<span style={styles.warningIcon}>⚠</span>{' '}
+				Calculations assume{' '}
+				<span style={styles.warningBold}>20 base stacks</span> per module
+				(fully upgraded). Results will differ with lower-tier modules.
 			</p>
 
-			{stats.map(({ category, stat, total, finalStacks, contributors }) => {
-				const hdr = CATEGORY_HEADER[category]
-				const isZero = total <= 0
-				return (
-					<div
-						key={category}
-						className={`border-l-2 pl-3 ${hdr.border} ${isZero ? 'opacity-50' : ''}`}
-					>
-						{/* Category header */}
-						<div
-							className={`text-[11px] font-bold uppercase tracking-widest mb-1.5 flex items-center justify-between ${hdr.color}`}
-						>
-							<span className='flex items-center gap-1'>
-								<span>{hdr.icon}</span>
-								<span>{category}</span>
-							</span>
-							<span className='font-normal normal-case tracking-normal text-gray-400'>
-								{finalStacks} stacks
-							</span>
-						</div>
+			{/* Category blocks */}
+			<div style={styles.blocks}>
+				{stats.map(({ category, stat, total, finalStacks }) => {
+					const isZero = total <= 0
+					const rate = STAT_RATE[stat]
+					const totalStr = Number.isInteger(total)
+						? total.toFixed(0)
+						: total.toFixed(1)
 
-						{/* Stat row */}
-						<div className='space-y-1'>
-							<div className='flex items-center justify-between text-xs'>
-								<span className='flex items-center gap-1.5 text-gray-300'>
-									<span>{STAT_ICONS[stat]}</span>
-									<span className='font-medium'>{STAT_LABELS[stat]}</span>
-								</span>
-								<span
-									className={`font-bold ${isZero ? 'text-gray-500' : 'text-white'}`}
-								>
-									+{Number.isInteger(total) ? total.toFixed(0) : total.toFixed(1)}%
-								</span>
+					return (
+						<div key={category} style={{ lineHeight: 1.3, opacity: isZero ? 0.45 : 1 }}>
+							{/* Category title */}
+							<div style={styles.categoryTitle}>{category}</div>
+
+							{/* Stacks line */}
+							<div style={styles.stacksLine}>
+								{finalStacks} [{BASE_STACKS}] stacks
 							</div>
 
-							{/* Progress bar */}
-							<div className='h-2 bg-gray-700 rounded-full overflow-hidden'>
-								<div
-									className={`h-full rounded-full bg-gradient-to-r ${CATEGORY_BAR[category]} transition-all duration-500`}
-									style={{ width: `${Math.min((total / maxVal) * 100, 100)}%` }}
-								/>
+							{/* Bonus percentage + stat label */}
+							<div style={styles.bonusLine}>
+								<span style={isZero ? styles.bonusPctZero : styles.bonusPct}>
+									+{totalStr}%
+								</span>
+								<span style={styles.effectLabel}>{STAT_LABELS[stat]}</span>
 							</div>
 
-							<p className='text-[10px] text-gray-500'>
-								{contributors.join(', ')}
-							</p>
+							{/* Per-stack rate */}
+							{rate > 0 && (
+								<div style={styles.rateLabel}>({rate}% per stack)</div>
+							)}
 						</div>
-					</div>
-				)
-			})}
+					)
+				})}
+			</div>
 		</div>
 	)
 }
