@@ -30,7 +30,7 @@ const BASE_STACKS: Record<SimCat, number> = {
  */
 const STACK_RATES: Record<SimCat, Partial<Record<StatKey, number>>> = {
   Offense: { weaponHandling: 1, headshotDamage: 3, magazineSize: 1 },
-  Defense: { totalArmor: 0.5, protectionFromElites: 0.75, hazardProtection: 1 },
+  Defense: { totalArmor: 0.5, protectionFromElites: 0.5, hazardProtection: 1 },
   Utility: { skillDamage: 1, skillRepair: 1, statusEffects: 1 },
 }
 
@@ -126,17 +126,17 @@ export function calculateStats(selectedModifiers: Modifier[]): StatResult[] {
         break
 
       case 'nullify': {
-        // Reverses net changes on the *current* lowest category.
+        // Reverses net stack changes on the *current* lowest category.
         // Fails silently when two or more categories share the minimum or the category is locked.
-        // "All previous value changes" includes potency changes (e.g. from Compress), so those
-        // are also reversed by resetting potency back to 1.
+        // Only stack counts are reversed; potency changes (e.g. from Compress) are not affected,
+        // so Compress D followed by Nullify retains the 1.5× potency on 30 restored stacks
+        // giving an effective 0.75%/stack PFE rate (0.5% base × 1.5 potency).
         const sorted = [...SIM_CATS].sort((a, b) => total(a) - total(b))
         if (total(sorted[0]) < total(sorted[1])) {
           const minCat = sorted[0]
           if (!locked[minCat]) {
             const delta = stacks[minCat] - BASE_STACKS[minCat]
             stacks[minCat] = Math.max(0, BASE_STACKS[minCat] - delta)
-            potency[minCat] = 1
             addContributor(minCat, mod.name)
           }
         }
