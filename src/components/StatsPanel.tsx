@@ -7,6 +7,7 @@ interface StatsPanelProps {
 }
 
 const BASE_STACKS = 20
+const ORANGE_ACCENT = '#FF6200'
 
 const styles = {
 	panel: {
@@ -21,7 +22,7 @@ const styles = {
 		lineHeight: '1.5',
 	} as CSSProperties,
 	warningIcon: {
-		color: '#FF6200',
+		color: ORANGE_ACCENT,
 	} as CSSProperties,
 	warningBold: {
 		color: '#9ca3af',
@@ -33,7 +34,7 @@ const styles = {
 		gap: '0.75rem',
 	} as CSSProperties,
 	categoryTitle: {
-		color: '#FF6200',
+		color: ORANGE_ACCENT,
 		fontWeight: 700,
 		fontSize: '0.6875rem',
 		textTransform: 'uppercase',
@@ -53,7 +54,7 @@ const styles = {
 		minWidth: '3.75rem',
 	} as CSSProperties,
 	stackCurrent: {
-		color: '#FF6200',
+		color: ORANGE_ACCENT,
 		fontWeight: 800,
 		fontSize: '1.25rem',
 		lineHeight: 1,
@@ -64,13 +65,13 @@ const styles = {
 		fontSize: '0.75rem',
 	} as CSSProperties,
 	bonusPct: {
-		color: '#FF6200',
+		color: ORANGE_ACCENT,
 		fontWeight: 700,
 		fontSize: '0.875rem',
 		lineHeight: 1,
 	} as CSSProperties,
 	bonusPctZero: {
-		color: '#FF6200',
+		color: ORANGE_ACCENT,
 		fontWeight: 700,
 		fontSize: '0.875rem',
 		lineHeight: 1,
