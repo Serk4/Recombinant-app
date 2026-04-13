@@ -30,7 +30,7 @@ const BASE_STACKS: Record<SimCat, number> = {
  */
 const STACK_RATES: Record<SimCat, Partial<Record<StatKey, number>>> = {
   Offense: { weaponHandling: 1, headshotDamage: 3, magazineSize: 1 },
-  Defense: { totalArmor: 0.5, protectionFromElites: 0.5, hazardProtection: 1 },
+  Defense: { totalArmor: 0.5, protectionFromElites: 0.75, hazardProtection: 1 },
   Utility: { skillDamage: 1, skillRepair: 1, statusEffects: 1 },
 }
 
@@ -245,6 +245,8 @@ export interface TipEntry {
   label: string
   description: string
   modifiers: Modifier[]
+  /** All unique modifier combinations that achieve the same best value, each in optimal slot order */
+  allCombos: Modifier[][]
   statKey: StatKey
   totalValue: number
 }
@@ -266,13 +268,14 @@ function permutations<T>(arr: T[]): T[][] {
  * Generate best-combination tips for all stats across all possible
  * 1-, 2-, and 3-modifier combinations.  Every ordering of each combination
  * is evaluated so the tip reflects the optimal slot sequence.
+ * All unique combinations that tie for the best value are collected.
  */
 export function generateTips(): TipEntry[] {
   const tips: TipEntry[] = []
   const n = ALL_MODIFIERS.length
 
-  // Collect best combo (and its ordering) per stat
-  const bestPerStat = new Map<StatKey, { value: number; combo: Modifier[] }>()
+  // Collect best combo (and all tied combos) per stat
+  const bestPerStat = new Map<StatKey, { value: number; combos: Modifier[][] }>()
 
   const evaluate = (combo: Modifier[]) => {
     for (const ordered of permutations(combo)) {
@@ -280,7 +283,14 @@ export function generateTips(): TipEntry[] {
       for (const r of results) {
         const current = bestPerStat.get(r.stat)
         if (!current || r.total > current.value) {
-          bestPerStat.set(r.stat, { value: r.total, combo: ordered })
+          bestPerStat.set(r.stat, { value: r.total, combos: [ordered] })
+        } else if (current && Math.abs(r.total - current.value) < 1e-9) {
+          // Same best value — add this combo if its modifier set is not already stored
+          const ids = ordered.map((m) => m.id).sort().join(',')
+          const exists = current.combos.some(
+            (c) => c.map((m) => m.id).sort().join(',') === ids,
+          )
+          if (!exists) current.combos.push(ordered)
         }
       }
     }
@@ -305,12 +315,13 @@ export function generateTips(): TipEntry[] {
     }
   }
 
-  for (const [statKey, { value, combo }] of bestPerStat.entries()) {
-    const names = combo.map((m) => m.name).join(' → ')
+  for (const [statKey, { value, combos }] of bestPerStat.entries()) {
+    const names = combos[0].map((m) => m.name).join(' → ')
     tips.push({
       label: `Best ${statKey} combo`,
       description: `Slot ${names} for +${value.toFixed(1)}% ${statKey}.`,
-      modifiers: combo,
+      modifiers: combos[0],
+      allCombos: combos,
       statKey,
       totalValue: value,
     })

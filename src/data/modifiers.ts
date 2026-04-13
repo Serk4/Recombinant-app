@@ -2,7 +2,7 @@
 // Values are based on in-game data for the Y8S1 season
 
 // Offense: weaponHandling (default, 1%/stack), headshotDamage (C1, 3%/stack), magazineSize (C2, 1%/stack)
-// Defense: totalArmor (default, 0.5%/stack), protectionFromElites (C1, 1.125%/stack), hazardProtection (C2, 1.5%/stack)
+// Defense: totalArmor (default, 0.5%/stack), protectionFromElites (C1, 0.75%/stack), hazardProtection (C2, 1%/stack)
 // Utility: skillDamage (default, 1%/stack), skillRepair (C1, 1%/stack), statusEffects (C2, 1%/stack)
 export type StatKey =
   | 'weaponHandling'
@@ -275,11 +275,11 @@ const DEFENSE_MODIFIERS: Modifier[] = [
     id: 'convert1D',
     name: 'Convert 1',
     category: 'Defense',
-    description: 'Defense stacks now provide Protection from Elites at ~1.125% per stack instead of Max Armor.',
+    description: 'Defense stacks now provide Protection from Elites at 0.75% per stack instead of Max Armor.',
     stackChanges: [],
     effectType: 'convert',
-    effectDescription: 'Defense → Protection from Elites (~1.125%/stack) instead of Max Armor. Best with 20 stacks = 22.5% PFE.',
-    // ~1.125% per stack × ~20 base defense stacks
+    effectDescription: 'Defense → Protection from Elites (0.75%/stack) instead of Max Armor. Best with 30 stacks (e.g. with Consume or Compress+Nullify) = 22.5% PFE.',
+    // 0.75% per stack × 30 stacks (e.g. with Consume or Compress+Nullify) = 22.5% PFE
     stats: [{ stat: 'protectionFromElites', baseValue: 22.5, synergyBonus: 4.5 }],
     synergyWith: ['amplifyD', 'consumeD', 'saturateD'],
     icon: '⭐',
