@@ -7,6 +7,7 @@ interface StatsPanelProps {
 }
 
 const BASE_STACKS = 20
+const ORANGE_ACCENT = '#FF6200'
 
 const styles = {
 	panel: {
@@ -21,7 +22,7 @@ const styles = {
 		lineHeight: '1.5',
 	} as CSSProperties,
 	warningIcon: {
-		color: '#FF6200',
+		color: ORANGE_ACCENT,
 	} as CSSProperties,
 	warningBold: {
 		color: '#9ca3af',
@@ -33,7 +34,7 @@ const styles = {
 		gap: '0.75rem',
 	} as CSSProperties,
 	categoryTitle: {
-		color: '#FF6200',
+		color: ORANGE_ACCENT,
 		fontWeight: 700,
 		fontSize: '0.6875rem',
 		textTransform: 'uppercase',
@@ -47,25 +48,30 @@ const styles = {
 		flexWrap: 'wrap' as const,
 	} as CSSProperties,
 	stacksInline: {
+		display: 'flex',
+		alignItems: 'baseline',
+		gap: '0.25rem',
+		minWidth: '3.75rem',
+	} as CSSProperties,
+	stackCurrent: {
+		color: ORANGE_ACCENT,
+		fontWeight: 800,
+		fontSize: '1.25rem',
+		lineHeight: 1,
+	} as CSSProperties,
+	stackBase: {
 		color: '#9ca3af',
 		fontWeight: 600,
 		fontSize: '0.75rem',
-		minWidth: '3.5rem',
 	} as CSSProperties,
 	bonusPct: {
-		color: '#ffffff',
-		fontWeight: 700,
-		fontSize: '0.875rem',
-		lineHeight: 1,
-	} as CSSProperties,
-	bonusPctZero: {
-		color: '#4b5563',
+		color: ORANGE_ACCENT,
 		fontWeight: 700,
 		fontSize: '0.875rem',
 		lineHeight: 1,
 	} as CSSProperties,
 	effectLabel: {
-		color: '#c2843a',
+		color: '#ffffff',
 		fontWeight: 500,
 		fontSize: '0.75rem',
 		fontVariant: 'small-caps',
@@ -126,11 +132,10 @@ export function StatsPanel({ stats }: StatsPanelProps) {
 							{/* Single info row: stacks  +bonus% Label  (rate% per stack) */}
 							<div style={styles.infoRow}>
 								<span style={styles.stacksInline}>
-									{finalStacks}[{BASE_STACKS}]
+									<span style={styles.stackCurrent}>{finalStacks}</span>
+									<span style={styles.stackBase}>[{BASE_STACKS}]</span>
 								</span>
-								<span style={isZero ? styles.bonusPctZero : styles.bonusPct}>
-									+{totalStr}%
-								</span>
+								<span style={styles.bonusPct}>+{totalStr}%</span>
 								<span style={styles.effectLabel}>{STAT_LABELS[stat]}</span>
 								{effectiveRate > 0 && (
 									<span style={styles.rateLabel}>({rateStr}% per stack)</span>
