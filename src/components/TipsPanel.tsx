@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import type { TipEntry } from '../utils/calculator'
+import { rankModifiersByVersatility } from '../utils/calculator'
 import type { Modifier } from '../data/modifiers'
 import { STAT_LABELS } from '../data/modifiers'
 import type { StatKey } from '../data/modifiers'
@@ -55,6 +56,18 @@ const TAB_ACTIVE: Record<TipCategory, string> = {
 	Utility: 'ring-yellow-400',
 }
 
+const STAT_SHORT: Record<StatKey, string> = {
+	weaponHandling: 'WH',
+	headshotDamage: 'HS Dmg',
+	magazineSize: 'Mag',
+	totalArmor: 'Armor',
+	protectionFromElites: 'PFE',
+	hazardProtection: 'Hazard',
+	skillDamage: 'Skill Dmg',
+	statusEffects: 'Status',
+	skillRepair: 'Repair',
+}
+
 export function TipsPanel({
 	tips,
 	selectedCount,
@@ -63,6 +76,8 @@ export function TipsPanel({
 }: TipsPanelProps) {
 	const [expanded, setExpanded] = useState(false)
 	const [activeFilter, setActiveFilter] = useState<TipCategory>('All')
+
+	const priorityList = useMemo(() => rankModifiersByVersatility(tips), [tips])
 
 	const filtered =
 		activeFilter === 'All'
@@ -129,6 +144,9 @@ export function TipsPanel({
 					{expanded ? '▲ Show less' : `▼ Show ${filtered.length - 6} more tips`}
 				</button>
 			)}
+
+			{/* Priority purchase ranking */}
+			<PriorityRankCard priorityList={priorityList} />
 		</div>
 	)
 }
@@ -262,6 +280,128 @@ function TipCard({
 					)
 				})}
 			</div>
+		</div>
+	)
+}
+
+// ─── Priority Purchase Ranking Card ─────────────────────────────────────────
+
+import type { ModifierPriorityEntry } from '../utils/calculator'
+
+const CAT_BADGE: Record<string, string> = {
+	Offense: 'bg-red-600/20 text-red-300 border border-red-500/30',
+	Defense: 'bg-blue-600/20 text-blue-300 border border-blue-500/30',
+	Utility: 'bg-yellow-600/20 text-yellow-300 border border-yellow-500/30',
+	Wildcard: 'bg-green-600/20 text-green-300 border border-green-500/30',
+}
+
+const COVERAGE_COLOR = [
+	'text-gray-500',   // 0
+	'text-gray-400',   // 1
+	'text-blue-400',   // 2
+	'text-yellow-400', // 3
+	'text-orange-400', // 4
+	'text-red-400',    // 5
+	'text-red-300',    // 6
+	'text-pink-400',   // 7
+	'text-fuchsia-400',// 8
+	'text-violet-400', // 9
+]
+
+function PriorityRankCard({
+	priorityList,
+}: {
+	priorityList: ModifierPriorityEntry[]
+}) {
+	const [showAll, setShowAll] = useState(false)
+	const visible = showAll ? priorityList : priorityList.slice(0, 10)
+
+	return (
+		<div className='border border-emerald-700/40 bg-emerald-900/10 rounded-xl px-4 py-3 space-y-3'>
+			{/* Header */}
+			<div>
+				<h3 className='text-sm font-bold text-white flex items-center gap-1.5'>
+					<span>🛒</span> Priority Purchase Ranking
+				</h3>
+				<p className='text-[11px] text-gray-400 mt-0.5'>
+					Modifiers ranked by multi-purpose versatility — covers the most stat
+					categories. Buy these first for the best bang per in-game currency.
+				</p>
+			</div>
+
+			{/* Column header */}
+			<div className='grid grid-cols-[1.5rem_1fr_auto] gap-x-2 text-[10px] font-semibold text-gray-500 uppercase tracking-wider px-1'>
+				<span>#</span>
+				<span>Modifier</span>
+				<span>Covers</span>
+			</div>
+
+			{/* Rows */}
+			<div className='space-y-1.5'>
+				{visible.map((entry, idx) => {
+					const coverageCount = entry.statsCovered.length
+					const colorClass =
+						COVERAGE_COLOR[Math.min(coverageCount, COVERAGE_COLOR.length - 1)]
+					return (
+						<div
+							key={entry.modifier.id}
+							className='grid grid-cols-[1.5rem_1fr_auto] gap-x-2 items-start rounded-lg px-1 py-1 hover:bg-white/5 transition-colors'
+						>
+							{/* Rank */}
+							<span className='text-xs font-bold text-gray-500 pt-0.5'>
+								{idx + 1}
+							</span>
+
+							{/* Name + category */}
+							<div className='min-w-0'>
+								<div className='flex items-center gap-1.5 flex-wrap'>
+									<span className='text-[11px]'>{entry.modifier.icon}</span>
+									<span className='text-xs font-semibold text-white'>
+										{entry.modifier.name}
+									</span>
+									<span
+										className={`text-[9px] px-1.5 py-0.5 rounded font-semibold ${CAT_BADGE[entry.modifier.category] ?? ''}`}
+									>
+										{entry.modifier.category}
+									</span>
+								</div>
+								{/* Stat chips */}
+								<div className='flex flex-wrap gap-1 mt-1'>
+									{entry.statsCovered.map((sk) => (
+										<span
+											key={sk}
+											className='text-[9px] px-1.5 py-0.5 rounded bg-gray-700/60 text-gray-300'
+										>
+											{STAT_SHORT[sk]}
+										</span>
+									))}
+								</div>
+							</div>
+
+							{/* Coverage badge */}
+							<div className='flex flex-col items-center pt-0.5'>
+								<span className={`text-base font-black leading-none ${colorClass}`}>
+									{coverageCount}
+								</span>
+								<span className='text-[8px] text-gray-600 leading-none mt-0.5'>
+									stats
+								</span>
+							</div>
+						</div>
+					)
+				})}
+			</div>
+
+			{priorityList.length > 10 && (
+				<button
+					onClick={() => setShowAll((v) => !v)}
+					className='w-full text-xs text-emerald-400 hover:text-emerald-300 py-1 transition-colors'
+				>
+					{showAll
+						? '▲ Show top 10 only'
+						: `▼ Show all ${priorityList.length} ranked modifiers`}
+				</button>
+			)}
 		</div>
 	)
 }
