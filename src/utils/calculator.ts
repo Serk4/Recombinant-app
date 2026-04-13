@@ -6,6 +6,8 @@ export interface StatResult {
   stat: StatKey
   total: number
   finalStacks: number
+  /** Per-stack rate after all modifiers (base rate × potency). 0 when disabled. */
+  effectiveRate: number
   /** Which modifiers contribute to this stat */
   contributors: string[]
 }
@@ -226,7 +228,9 @@ export function calculateStats(selectedModifiers: Modifier[]): StatResult[] {
   for (const cat of SIM_CATS) {
     const effectiveStat = convertStat[cat] ?? DEFAULT_CAT_STAT[cat]
     const finalStacks = Math.max(0, stacks[cat])
-    const value = disabled[cat] ? 0 : finalStacks * (STACK_RATES[cat][effectiveStat] ?? 0) * potency[cat]
+    const baseRate = STACK_RATES[cat][effectiveStat] ?? 0
+    const effectiveRate = disabled[cat] ? 0 : baseRate * potency[cat]
+    const value = disabled[cat] ? 0 : finalStacks * effectiveRate
 
     const contributors =
       disabled[cat]
@@ -235,7 +239,7 @@ export function calculateStats(selectedModifiers: Modifier[]): StatResult[] {
           ? catContributors[cat]
           : selectedModifiers.map((m) => m.name)
 
-    results.push({ category: cat, stat: effectiveStat, total: value, finalStacks, contributors })
+    results.push({ category: cat, stat: effectiveStat, total: value, finalStacks, effectiveRate, contributors })
   }
 
   return results

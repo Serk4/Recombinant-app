@@ -1,25 +1,12 @@
 import type { CSSProperties } from 'react'
 import type { StatResult } from '../utils/calculator'
 import { STAT_LABELS } from '../data/modifiers'
-import type { StatKey } from '../data/modifiers'
 
 interface StatsPanelProps {
 	stats: StatResult[]
 }
 
 const BASE_STACKS = 20
-
-const STAT_RATE: Record<StatKey, number> = {
-	weaponHandling: 1,
-	headshotDamage: 3,
-	magazineSize: 1,
-	totalArmor: 0.5,
-	protectionFromElites: 0.5,
-	hazardProtection: 1,
-	skillDamage: 1,
-	statusEffects: 1,
-	skillRepair: 1,
-}
 
 const styles = {
 	panel: {
@@ -122,9 +109,11 @@ export function StatsPanel({ stats }: StatsPanelProps) {
 
 			{/* Module rows */}
 			<div style={styles.blocks}>
-				{stats.map(({ category, stat, total, finalStacks }) => {
+				{stats.map(({ category, stat, total, finalStacks, effectiveRate }) => {
 					const isZero = total <= 0
-					const rate = STAT_RATE[stat]
+					const rateStr = Number.isInteger(effectiveRate)
+						? effectiveRate.toFixed(0)
+						: effectiveRate.toFixed(2).replace(/\.?0+$/, '')
 					const totalStr = Number.isInteger(total)
 						? total.toFixed(0)
 						: total.toFixed(1)
@@ -143,8 +132,8 @@ export function StatsPanel({ stats }: StatsPanelProps) {
 									+{totalStr}%
 								</span>
 								<span style={styles.effectLabel}>{STAT_LABELS[stat]}</span>
-								{rate > 0 && (
-									<span style={styles.rateLabel}>({rate}% per stack)</span>
+								{effectiveRate > 0 && (
+									<span style={styles.rateLabel}>({rateStr}% per stack)</span>
 								)}
 							</div>
 						</div>

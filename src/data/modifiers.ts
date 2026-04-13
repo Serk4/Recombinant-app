@@ -129,7 +129,7 @@ const OFFENSE_MODIFIERS: Modifier[] = [
     effectDescription: 'Each remaining Offense stack is 50% more potent',
     // Value scales with remaining stacks; synergy bonus represents potency gain
     stats: [{ stat: 'weaponHandling', baseValue: 0, synergyBonus: 8 }],
-    synergyWith: ['amplify', 'consume', 'saturate'],
+    synergyWith: ['amplify', 'consume', 'saturate', 'convert1', 'convert2'],
     icon: '🗜️',
   },
   {
@@ -142,7 +142,7 @@ const OFFENSE_MODIFIERS: Modifier[] = [
     effectDescription: 'Offense → Headshot Damage (base 3% per stack) instead of Weapon Handling',
     // 3% per stack × ~10 base offense stacks
     stats: [{ stat: 'headshotDamage', baseValue: 30, synergyBonus: 6 }],
-    synergyWith: ['amplify', 'consume'],
+    synergyWith: ['amplify', 'consume', 'compress'],
     icon: '🎯',
   },
   {
@@ -155,7 +155,7 @@ const OFFENSE_MODIFIERS: Modifier[] = [
     effectDescription: 'Offense → Magazine Size (base 1% per stack) instead of Weapon Handling',
     // 1% per stack × ~10 base offense stacks
     stats: [{ stat: 'magazineSize', baseValue: 10, synergyBonus: 2 }],
-    synergyWith: ['amplify', 'consume'],
+    synergyWith: ['amplify', 'consume', 'compress'],
     icon: '🔋',
   },
   {
@@ -268,7 +268,7 @@ const DEFENSE_MODIFIERS: Modifier[] = [
     effectType: 'compress',
     effectDescription: 'Each remaining Defense stack is 50% more potent',
     stats: [{ stat: 'totalArmor', baseValue: 0, synergyBonus: 6 }],
-    synergyWith: ['amplifyD', 'consumeD', 'nullify'],
+    synergyWith: ['amplifyD', 'consumeD', 'nullify', 'convert1D', 'convert2D'],
     icon: '🗜️',
   },
   {
@@ -281,20 +281,20 @@ const DEFENSE_MODIFIERS: Modifier[] = [
     effectDescription: 'Defense → Protection from Elites (0.5%/stack base, 0.75%/stack with Compress+Nullify) instead of Max Armor. Best with Compress+Nullify (30 stacks × 1.5 potency) = 22.5% PFE.',
     // 0.5% per stack × 20 base defense stacks = 10% PFE (base); 0.5% × 1.5 potency × 30 stacks (Compress+Nullify) = 22.5% PFE
     stats: [{ stat: 'protectionFromElites', baseValue: 10, synergyBonus: 4.5 }],
-    synergyWith: ['amplifyD', 'consumeD', 'saturateD'],
+    synergyWith: ['amplifyD', 'consumeD', 'saturateD', 'compressD'],
     icon: '⭐',
   },
   {
     id: 'convert2D',
     name: 'Convert 2',
     category: 'Defense',
-    description: 'Defense stacks now provide Hazard Protection at 1.5% per stack instead of Max Armor.',
+    description: 'Defense stacks now provide Hazard Protection at 1% per stack instead of Max Armor.',
     stackChanges: [],
     effectType: 'convert',
-    effectDescription: 'Defense → Hazard Protection (1.5%/stack) instead of Max Armor.',
-    // ~1.5% per stack × ~20 base defense stacks
-    stats: [{ stat: 'hazardProtection', baseValue: 30, synergyBonus: 6 }],
-    synergyWith: ['amplifyD', 'consumeD'],
+    effectDescription: 'Defense → Hazard Protection (1%/stack base, 1.5%/stack with Compress) instead of Max Armor.',
+    // ~1% per stack × ~20 base defense stacks; 1.5%/stack with Compress active
+    stats: [{ stat: 'hazardProtection', baseValue: 20, synergyBonus: 6 }],
+    synergyWith: ['amplifyD', 'consumeD', 'compressD'],
     icon: '☢️',
   },
   {
@@ -404,7 +404,7 @@ const UTILITY_MODIFIERS: Modifier[] = [
     effectType: 'compress',
     effectDescription: 'Each remaining Utility stack is 50% more potent',
     stats: [{ stat: 'skillDamage', baseValue: 0, synergyBonus: 8 }],
-    synergyWith: ['amplifyU', 'consumeU', 'saturateU'],
+    synergyWith: ['amplifyU', 'consumeU', 'saturateU', 'convert1U', 'convert2U'],
     icon: '🗜️',
   },
   {
@@ -416,7 +416,7 @@ const UTILITY_MODIFIERS: Modifier[] = [
     effectType: 'convert',
     effectDescription: 'Utility → Skill Repair (1%/stack) instead of Skill Damage',
     stats: [{ stat: 'skillRepair', baseValue: 20, synergyBonus: 5 }],
-    synergyWith: ['amplifyU', 'consumeU'],
+    synergyWith: ['amplifyU', 'consumeU', 'compressU'],
     icon: '🩹',
   },
   {
@@ -428,7 +428,7 @@ const UTILITY_MODIFIERS: Modifier[] = [
     effectType: 'convert',
     effectDescription: 'Utility → Status Effects (1%/stack) instead of Skill Damage',
     stats: [{ stat: 'statusEffects', baseValue: 20, synergyBonus: 5 }],
-    synergyWith: ['amplifyU', 'consumeU'],
+    synergyWith: ['amplifyU', 'consumeU', 'compressU'],
     icon: '☣️',
   },
   {
