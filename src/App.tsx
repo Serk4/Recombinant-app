@@ -101,6 +101,16 @@ function App() {
 			</header>
 
 			<div className='max-w-2xl mx-auto px-4 pb-8'>
+				{/* ── MODULE STACKS CARD ── */}
+				{activeTab === 'build' && selected.length > 0 && (
+					<section className='mt-4 bg-gray-900/60 border border-gray-800 rounded-2xl p-4'>
+						<h2 className='text-sm font-bold text-gray-300 mb-3 flex items-center gap-1.5'>
+							<span>📊</span> Module Stacks
+						</h2>
+						<StatsPanel stats={stats} />
+					</section>
+				)}
+
 				{/* ── SELECTED SLOTS BAR ── */}
 				<div className='sticky top-[57px] z-10 bg-gray-950/95 backdrop-blur pt-3 pb-2'>
 					<div className='flex items-center justify-between mb-2'>
@@ -136,15 +146,6 @@ function App() {
 
 				{activeTab === 'build' ? (
 					<>
-						{/* ── STATS PANEL ── */}
-						{selected.length > 0 && (
-							<section className='mt-4 bg-gray-900/60 border border-gray-800 rounded-2xl p-4'>
-								<h2 className='text-sm font-bold text-gray-300 mb-3 flex items-center gap-1.5'>
-									<span>📊</span> Combined Stats
-								</h2>
-								<StatsPanel stats={stats} />
-							</section>
-						)}
 
 						{/* ── MODIFIER PICKER ── */}
 						<section className='mt-4'>
