@@ -46,7 +46,7 @@ const styles = {
 		alignItems: 'center',
 		gap: '0.375rem',
 		flexWrap: 'nowrap' as const,
-		whiteSpace: 'nowrap' as const,
+		overflowX: 'auto',
 	} as CSSProperties,
 	stacksInline: {
 		display: 'flex',
@@ -70,18 +70,21 @@ const styles = {
 		fontWeight: 700,
 		fontSize: 'clamp(0.7rem, 2.5vw, 0.875rem)',
 		lineHeight: 1,
+		whiteSpace: 'nowrap' as const,
 	} as CSSProperties,
 	effectLabel: {
 		color: '#ffffff',
 		fontWeight: 500,
 		fontSize: 'clamp(0.65rem, 2.3vw, 0.75rem)',
 		fontVariant: 'small-caps',
+		whiteSpace: 'nowrap' as const,
 	} as CSSProperties,
 	rateLabel: {
 		color: '#cbd5e1',
 		fontWeight: 600,
 		fontSize: 'clamp(0.62rem, 2.1vw, 0.6875rem)',
 		letterSpacing: '0.01em',
+		whiteSpace: 'nowrap' as const,
 	} as CSSProperties,
 	mutedBuff: {
 		color: '#6b7280',
