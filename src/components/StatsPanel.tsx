@@ -8,6 +8,7 @@ interface StatsPanelProps {
 
 const BASE_STACKS = 20
 const ORANGE_ACCENT = '#FF6200'
+const MUTED_TEXT = '#6b7280'
 
 const styles = {
 	panel: {
@@ -17,7 +18,7 @@ const styles = {
 	} as CSSProperties,
 	warning: {
 		fontSize: '0.625rem',
-		color: '#6b7280',
+		color: MUTED_TEXT,
 		marginBottom: '0.875rem',
 		lineHeight: '1.5',
 	} as CSSProperties,
@@ -43,45 +44,53 @@ const styles = {
 	} as CSSProperties,
 	infoRow: {
 		display: 'flex',
-		alignItems: 'baseline',
-		gap: '0.5rem',
-		flexWrap: 'wrap' as const,
+		alignItems: 'center',
+		gap: '0.375rem',
+		flexWrap: 'nowrap' as const,
 	} as CSSProperties,
 	stacksInline: {
 		display: 'flex',
 		alignItems: 'baseline',
-		gap: '0.25rem',
-		minWidth: '3.75rem',
+		gap: '0.1875rem',
+		minWidth: '3.5rem',
 	} as CSSProperties,
 	stackCurrent: {
 		color: ORANGE_ACCENT,
 		fontWeight: 800,
-		fontSize: '1.25rem',
+		fontSize: '1rem',
 		lineHeight: 1,
 	} as CSSProperties,
 	stackBase: {
 		color: '#9ca3af',
 		fontWeight: 600,
-		fontSize: '0.75rem',
+		fontSize: '0.65rem',
 	} as CSSProperties,
 	bonusPct: {
 		color: ORANGE_ACCENT,
 		fontWeight: 700,
-		fontSize: '0.875rem',
+		fontSize: '0.7rem',
 		lineHeight: 1,
+		whiteSpace: 'nowrap' as const,
 	} as CSSProperties,
 	effectLabel: {
 		color: '#ffffff',
 		fontWeight: 500,
-		fontSize: '0.75rem',
+		fontSize: '0.7rem',
 		fontVariant: 'small-caps',
+		whiteSpace: 'nowrap' as const,
 	} as CSSProperties,
 	rateLabel: {
-		color: '#4b5563',
-		fontSize: '0.6875rem',
+		color: '#cbd5e1',
+		fontWeight: 600,
+		fontSize: '0.65rem',
+		letterSpacing: '0.01em',
+		whiteSpace: 'nowrap' as const,
+	} as CSSProperties,
+	mutedBuff: {
+		color: MUTED_TEXT,
 	} as CSSProperties,
 	empty: {
-		color: '#6b7280',
+		color: MUTED_TEXT,
 		textAlign: 'center',
 		padding: '2rem 0',
 		fontSize: '0.875rem',
@@ -125,7 +134,7 @@ export function StatsPanel({ stats }: StatsPanelProps) {
 						: total.toFixed(1)
 
 					return (
-						<div key={category} style={{ opacity: isZero ? 0.45 : 1 }}>
+						<div key={category}>
 							{/* Category title */}
 							<div style={styles.categoryTitle}>{category}</div>
 
@@ -135,10 +144,16 @@ export function StatsPanel({ stats }: StatsPanelProps) {
 									<span style={styles.stackCurrent}>{finalStacks}</span>
 									<span style={styles.stackBase}>[{BASE_STACKS}]</span>
 								</span>
-								<span style={styles.bonusPct}>+{totalStr}%</span>
-								<span style={styles.effectLabel}>{STAT_LABELS[stat]}</span>
+								<span style={{ ...styles.bonusPct, ...(isZero ? styles.mutedBuff : {}) }}>
+									+{totalStr}%
+								</span>
+								<span style={{ ...styles.effectLabel, ...(isZero ? styles.mutedBuff : {}) }}>
+									{STAT_LABELS[stat]}
+								</span>
 								{effectiveRate > 0 && (
-									<span style={styles.rateLabel}>({rateStr}% per stack)</span>
+									<span style={{ ...styles.rateLabel, ...(isZero ? styles.mutedBuff : {}) }}>
+										({rateStr}% per stack)
+									</span>
 								)}
 							</div>
 						</div>
