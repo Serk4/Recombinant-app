@@ -8,6 +8,7 @@ interface StatsPanelProps {
 
 const BASE_STACKS = 20
 const ORANGE_ACCENT = '#FF6200'
+const MUTED_TEXT = '#6b7280'
 
 const styles = {
 	panel: {
@@ -17,7 +18,7 @@ const styles = {
 	} as CSSProperties,
 	warning: {
 		fontSize: '0.625rem',
-		color: '#6b7280',
+		color: MUTED_TEXT,
 		marginBottom: '0.875rem',
 		lineHeight: '1.5',
 	} as CSSProperties,
@@ -67,14 +68,14 @@ const styles = {
 	bonusPct: {
 		color: ORANGE_ACCENT,
 		fontWeight: 700,
-		fontSize: '0.72rem',
+		fontSize: '0.7rem',
 		lineHeight: 1,
 		whiteSpace: 'nowrap' as const,
 	} as CSSProperties,
 	effectLabel: {
 		color: '#ffffff',
 		fontWeight: 500,
-		fontSize: '0.68rem',
+		fontSize: '0.7rem',
 		fontVariant: 'small-caps',
 		whiteSpace: 'nowrap' as const,
 	} as CSSProperties,
@@ -86,10 +87,10 @@ const styles = {
 		whiteSpace: 'nowrap' as const,
 	} as CSSProperties,
 	mutedBuff: {
-		color: '#6b7280',
+		color: MUTED_TEXT,
 	} as CSSProperties,
 	empty: {
-		color: '#6b7280',
+		color: MUTED_TEXT,
 		textAlign: 'center',
 		padding: '2rem 0',
 		fontSize: '0.875rem',
