@@ -6,11 +6,12 @@ A mobile-first React app for building and testing passive modifier combinations.
 
 ## Features
 
-- **18 Passive Modifiers** across three categories — Offense, Defense, and Utility
-- **Live stat calculation** — combined values update instantly as you pick modifiers, including synergy bonuses when multiple modifiers share a stat
+- **All 34 passive modifiers included** across Offense, Defense, and Utility categories
+- **3-slot passive builder** — select up to 3 modifiers and test different slot orders
+- **Live stat calculation** — combined values update instantly, including synergy scaling when multiple modifiers affect the same stat
 - **Synergy indicators** — cards that pair well with your current selection are highlighted with a SYNERGY badge
-- **Slot reordering** — use the ◀▶ buttons to change the order of your 3 modifier slots
-- **Tips tab** — all best 1/2/3-modifier combos ranked by total stat value (e.g. best Headshot Damage, best Hazard Protection, best Repair Skill, etc.)
+- **Tips tab (best combos)** — ranked best 1/2/3-modifier combinations for each tracked stat
+- **Best purchases tip guide** — priority ranking of modifiers to buy first based on versatility across top tip combinations
 - **Mobile-first** — designed for phone screens first, responsive on desktop
 
 ## Tech Stack
