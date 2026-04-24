@@ -1,0 +1,261 @@
+{
+	"appTitle": "Recombinant",
+	"menu": {
+		"label": "Menu",
+		"openMenu": "Open menu",
+		"view": "View",
+		"build": "Build",
+		"tips": "Tips",
+		"language": "Language"
+	},
+	"selectedSlots": {
+		"heading": "Selected Passive Modifiers ({{count}}/{{max}})",
+		"emptySlot": "Slot {{n}}",
+		"clearAll": "Clear all",
+		"slotsRemaining_one": "{{count}} slot remaining",
+		"slotsRemaining_other": "{{count}} slots remaining"
+	},
+	"modifierPicker": {
+		"title": "Choose Passive Modifiers",
+		"categories": {
+			"all": "All",
+			"offense": "Offense",
+			"defense": "Defense",
+			"utility": "Utility",
+			"wildcard": "Wildcard"
+		}
+	},
+	"modifiers": {
+		"amplify": {
+			"name": "Amplify",
+			"description": "Adds 5 Offense stacks with no change to contribution type.",
+			"effectDescription": "No change to stat type"
+		},
+		"consume": {
+			"name": "Consume",
+			"description": "Gains 10 Offense stacks by consuming 5 Defense and 5 Utility stacks.",
+			"effectDescription": "No change to stat type"
+		},
+		"saturate": {
+			"name": "Saturate",
+			"description": "Adds 25 Offense stacks, but they no longer contribute to stats.",
+			"effectDescription": "Offense stacks stop contributing to stats (still count for other passives)"
+		},
+		"compress": {
+			"name": "Compress",
+			"description": "Removes 10 Offense stacks, but each remaining stack is 50% more potent.",
+			"effectDescription": "Each remaining Offense stack is 50% more potent"
+		},
+		"convert1": {
+			"name": "Convert 1",
+			"description": "Offense stacks now provide Headshot Damage at 3% per stack instead of Weapon Handling.",
+			"effectDescription": "Offense \u2192 Headshot Damage (base 3% per stack) instead of Weapon Handling"
+		},
+		"convert2": {
+			"name": "Convert 2",
+			"description": "Offense stacks now provide Magazine Size at 1% per stack instead of Weapon Handling.",
+			"effectDescription": "Offense \u2192 Magazine Size (base 1% per stack) instead of Weapon Handling"
+		},
+		"split": {
+			"name": "Split",
+			"description": "Redistributes 15 Offense stacks as 10 Defense and 10 Utility stacks.",
+			"effectDescription": "Redistributes stacks"
+		},
+		"pivotO": {
+			"name": "Pivot",
+			"description": "Boosts the current lowest module by increasing whichever module is currently the lowest.",
+			"effectDescription": "Increases whichever module is currently the lowest"
+		},
+		"invertO": {
+			"name": "Invert",
+			"description": "Swap Offense stacks with the current highest module stacks. If Offense stacks are already the highest, or Defense and Utility stacks are tied for highest, nothing happens.",
+			"effectDescription": "Swaps Offense stacks with the highest other module. Fails if Offense is already the highest, or if Defense and Utility are tied for highest."
+		},
+		"stabilizeO": {
+			"name": "Stabilize",
+			"description": "Offense stacks are locked and cannot change.",
+			"effectDescription": "Offense stacks are frozen at their current value; all subsequent changes to Offense stacks are ignored."
+		},
+		"amplifyD": {
+			"name": "Amplify",
+			"description": "Adds 5 Defense stacks with no change to contribution type.",
+			"effectDescription": "No change to stat type"
+		},
+		"consumeD": {
+			"name": "Consume",
+			"description": "Gains 10 Defense stacks by consuming 5 Offense and 5 Utility stacks.",
+			"effectDescription": "No change to stat type"
+		},
+		"saturateD": {
+			"name": "Saturate",
+			"description": "Adds 25 Defense stacks, but they no longer contribute to stats.",
+			"effectDescription": "Defense stacks stop contributing to stats (still count for other passives such as Cascade/Convert)"
+		},
+		"compressD": {
+			"name": "Compress",
+			"description": "Removes 10 Defense stacks, but each remaining stack is 50% more potent.",
+			"effectDescription": "Each remaining Defense stack is 50% more potent"
+		},
+		"convert1D": {
+			"name": "Convert 1",
+			"description": "Defense stacks now provide Protection from Elites at 0.5% per stack instead of Max Armor.",
+			"effectDescription": "Defense \u2192 Protection from Elites (0.5%/stack base, 0.75%/stack with Compress+Nullify) instead of Max Armor."
+		},
+		"convert2D": {
+			"name": "Convert 2",
+			"description": "Defense stacks now provide Hazard Protection at 1% per stack instead of Max Armor.",
+			"effectDescription": "Defense \u2192 Hazard Protection (1%/stack base, 1.5%/stack with Compress) instead of Max Armor."
+		},
+		"splitD": {
+			"name": "Split",
+			"description": "Redistributes 15 Defense stacks as 10 Offense and 10 Utility stacks.",
+			"effectDescription": "Redistributes stacks"
+		},
+		"pivotD": {
+			"name": "Pivot",
+			"description": "Boosts the current lowest module using Defense stacks.",
+			"effectDescription": "Increases the lowest module\u2019s stacks using available Defense stacks. Useful in recovery builds."
+		},
+		"invertD": {
+			"name": "Invert",
+			"description": "Swap Defense stacks with the current highest module stacks. If Defense stacks are already the highest, or Offense and Utility stacks are tied for highest, nothing happens.",
+			"effectDescription": "Swaps Defense stacks with the highest other module. Fails if Defense is already the highest, or if Offense and Utility are tied for highest."
+		},
+		"stabilizeD": {
+			"name": "Stabilize",
+			"description": "Defense stacks are locked and cannot change.",
+			"effectDescription": "Defense stacks are frozen at their current value; all subsequent changes to Defense stacks are ignored."
+		},
+		"amplifyU": {
+			"name": "Amplify",
+			"description": "Adds 5 Utility stacks with no change to contribution type.",
+			"effectDescription": "No change to stat type"
+		},
+		"consumeU": {
+			"name": "Consume",
+			"description": "Gains 10 Utility stacks by consuming 5 Offense and 5 Defense stacks.",
+			"effectDescription": "No change to stat type"
+		},
+		"saturateU": {
+			"name": "Saturate",
+			"description": "Adds 25 Utility stacks, but they no longer contribute to stats.",
+			"effectDescription": "Utility stacks stop contributing to stats (still count for other passives)"
+		},
+		"compressU": {
+			"name": "Compress",
+			"description": "Removes 10 Utility stacks, but each remaining stack is 50% more potent.",
+			"effectDescription": "Each remaining Utility stack is 50% more potent"
+		},
+		"convert1U": {
+			"name": "Convert 1",
+			"description": "Utility stacks now provide Skill Repair at 1% per stack instead of Skill Damage.",
+			"effectDescription": "Utility \u2192 Skill Repair (1%/stack) instead of Skill Damage"
+		},
+		"convert2U": {
+			"name": "Convert 2",
+			"description": "Utility stacks now provide Status Effects at 1% per stack instead of Skill Damage.",
+			"effectDescription": "Utility \u2192 Status Effects (1%/stack) instead of Skill Damage"
+		},
+		"splitU": {
+			"name": "Split",
+			"description": "Redistributes 15 Utility stacks as 10 Offense and 10 Defense stacks.",
+			"effectDescription": "Redistributes stacks"
+		},
+		"pivotU": {
+			"name": "Pivot",
+			"description": "Boosts the current lowest module by increasing whichever module is currently the lowest.",
+			"effectDescription": "Increases whichever module is currently the lowest"
+		},
+		"invertU": {
+			"name": "Invert",
+			"description": "Swap Utility stacks with the current highest module stacks. If Utility stacks are already the highest, or Offense and Defense stacks are tied for highest, nothing happens.",
+			"effectDescription": "Swaps Utility stacks with the highest other module. Fails if Utility is already the highest, or if Offense and Defense are tied for highest."
+		},
+		"stabilizeU": {
+			"name": "Stabilize",
+			"description": "Utility stacks are locked and cannot change.",
+			"effectDescription": "Utility stacks are frozen at their current value; all subsequent changes to Utility stacks are ignored."
+		},
+		"nullify": {
+			"name": "Nullify",
+			"description": "Reverses all previous value changes on the lowest module — additions become subtractions and vice-versa.",
+			"effectDescription": "Reverses additions/subtractions on the lowest stack module. Fails if two or more modules are tied for lowest. Invert passives are unaffected."
+		},
+		"cascade": {
+			"name": "Cascade",
+			"description": "Disables the highest module's stacks, then splits half its value (rounded up) equally into the other two modules.",
+			"effectDescription": "Highest module's stacks stop contributing; +\u2308highest/2\u2309 stacks added to each other two modules. Fails if two or more tied for highest."
+		},
+		"converge": {
+			"name": "Converge",
+			"description": "The lowest module gains the average of the other two modules' stacks; the other two are then reduced to 0.",
+			"effectDescription": "Lowest module = average of the other two, then the other two drop to 0. Fails if two or more tied for lowest."
+		},
+		"equalize": {
+			"name": "Equalize",
+			"description": "All three modules become equal to the middle stack value.",
+			"effectDescription": "All modules set to the median stack count. Fails if the middle value is tied with the highest or lowest."
+		}
+	},
+	"statLabels": {
+		"weaponHandling": "Weapon Handling",
+		"headshotDamage": "Headshot Damage",
+		"magazineSize": "Magazine Size",
+		"totalArmor": "Max Armor",
+		"protectionFromElites": "Protection from Elites",
+		"hazardProtection": "Hazard Protection",
+		"skillDamage": "Skill Damage",
+		"statusEffects": "Status Effects",
+		"skillRepair": "Skill Repair"
+	},
+	"tips": {
+		"heading": "Best Combinations Guide",
+		"description": "Best modifier combinations ranked by total stat value. The order shown is the optimal slot sequence \u2014 slot order affects the final values.",
+		"filterAll": "All",
+		"noResults": "No tips for this category.",
+		"showLess": "\u25b2 Show less",
+		"showMore": "\u25bc Show {{count}} more tips",
+		"bestStat": "Best {{stat}}",
+		"replace": "Replace?",
+		"ariaApply": "Apply tip",
+		"ariaConfirm": "Confirm apply",
+		"ariaCancel": "Cancel apply",
+		"priorityRanking": {
+			"heading": "Priority Purchase Ranking",
+			"description": "Modifiers ranked by multi-purpose versatility \u2014 covers the most stat categories. Buy these first for the best bang per in-game currency.",
+			"colRank": "#",
+			"colModifier": "Modifier",
+			"colCovers": "Covers",
+			"statsLabel": "stats",
+			"showTopOnly": "\u25b2 Show top 10 only",
+			"showAll": "\u25bc Show all {{count}} ranked modifiers"
+		}
+	},
+	"synergy": {
+		"badge": "SYNERGY",
+		"hint": "Cards marked <strong>SYNERGY</strong> pair well with your current selection."
+	},
+	"footer": {
+		"line1": "Tom Clancy's The Division 2 \u2014 Rise Up Y8S1",
+		"line2": "Modifier values are approximate and for reference only."
+	},
+	"stats": {
+		"moduleStacksHeading": "Module Stacks",
+		"empty": "Select up to 3 modifiers to see combined stats",
+		"warningPre": "Calculations assume",
+		"warningBold": "{{count}} base stacks",
+		"warningPost": "per module (fully upgraded). Results will differ with lower-tier modules.",
+		"ratePerStack": "({{rate}}% per stack)"
+	},
+	"statShort": {
+		"weaponHandling": "WH",
+		"headshotDamage": "HS Dmg",
+		"magazineSize": "Mag",
+		"totalArmor": "Armor",
+		"protectionFromElites": "PFE",
+		"hazardProtection": "Hazard",
+		"skillDamage": "Skill Dmg",
+		"statusEffects": "Status",
+		"skillRepair": "Repair"
+	}
+}

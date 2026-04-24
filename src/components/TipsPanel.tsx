@@ -1,8 +1,8 @@
 import { useState, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import type { TipEntry } from '../utils/calculator'
 import { rankModifiersByVersatility } from '../utils/calculator'
 import type { Modifier } from '../data/modifiers'
-import { STAT_LABELS } from '../data/modifiers'
 import type { StatKey } from '../data/modifiers'
 
 interface TipsPanelProps {
@@ -56,24 +56,13 @@ const TAB_ACTIVE: Record<TipCategory, string> = {
 	Utility: 'ring-yellow-400',
 }
 
-const STAT_SHORT: Record<StatKey, string> = {
-	weaponHandling: 'WH',
-	headshotDamage: 'HS Dmg',
-	magazineSize: 'Mag',
-	totalArmor: 'Armor',
-	protectionFromElites: 'PFE',
-	hazardProtection: 'Hazard',
-	skillDamage: 'Skill Dmg',
-	statusEffects: 'Status',
-	skillRepair: 'Repair',
-}
-
 export function TipsPanel({
 	tips,
 	selectedCount,
 	appliedTip,
 	onApply,
 }: TipsPanelProps) {
+	const { t } = useTranslation()
 	const [expanded, setExpanded] = useState(false)
 	const [activeFilter, setActiveFilter] = useState<TipCategory>('All')
 
@@ -88,10 +77,7 @@ export function TipsPanel({
 
 	return (
 		<div className='space-y-3'>
-			<p className='text-xs text-gray-400'>
-				Best modifier combinations ranked by total stat value. The order shown
-				is the optimal slot sequence — slot order affects the final values.
-			</p>
+			<p className='text-xs text-gray-400'>{t('tips.description')}</p>
 
 			{/* Category filter buttons */}
 			<div className='flex gap-1.5 overflow-x-auto pb-1 px-0.5 pt-0.5 scrollbar-hide'>
@@ -108,14 +94,16 @@ export function TipsPanel({
 							${activeFilter === tab ? `ring-2 ring-inset ${TAB_ACTIVE[tab]} scale-105` : 'opacity-70 hover:opacity-90'}
 						`}
 					>
-						{tab}
+						{tab === 'All'
+							? t('tips.filterAll')
+							: t(`modifierPicker.categories.${tab.toLowerCase()}`)}
 					</button>
 				))}
 			</div>
 
 			{visible.length === 0 ? (
 				<p className='text-xs text-gray-500 text-center py-4'>
-					No tips for this category.
+					{t('tips.noResults')}
 				</p>
 			) : (
 				visible.map((tip, i) => (
@@ -125,9 +113,7 @@ export function TipsPanel({
 						rank={i + 1}
 						selectedCount={selectedCount}
 						appliedComboIndex={
-							appliedTip?.statKey === tip.statKey
-								? appliedTip.comboIndex
-								: null
+							appliedTip?.statKey === tip.statKey ? appliedTip.comboIndex : null
 						}
 						onApply={(mods, comboIndex) =>
 							onApply(mods, tip.statKey, comboIndex)
@@ -141,7 +127,9 @@ export function TipsPanel({
 					onClick={() => setExpanded((e) => !e)}
 					className='w-full text-xs text-green-400 hover:text-green-300 py-2 transition-colors'
 				>
-					{expanded ? '▲ Show less' : `▼ Show ${filtered.length - 6} more tips`}
+					{expanded
+						? t('tips.showLess')
+						: t('tips.showMore', { count: filtered.length - 6 })}
 				</button>
 			)}
 
@@ -164,6 +152,7 @@ function TipCard({
 	selectedCount: number
 	onApply: (modifiers: Modifier[], comboIndex: number) => void
 }) {
+	const { t } = useTranslation()
 	const [confirming, setConfirming] = useState<number | null>(null)
 
 	function handleApplyClick(comboIndex: number) {
@@ -193,19 +182,17 @@ function TipCard({
 	const combos = tip.allCombos
 
 	return (
-		<div
-			className={`border rounded-xl px-4 py-3 ${CARD_COLORS[tipCategory]}`}
-		>
+		<div className={`border rounded-xl px-4 py-3 ${CARD_COLORS[tipCategory]}`}>
 			{/* Header row: rank + stat + badge + value + applied check */}
 			<div className='flex items-center gap-2 flex-wrap'>
 				<span className='text-xs font-bold text-gray-500'>#{rank}</span>
 				<span className='text-sm font-semibold text-white'>
-					Best {STAT_LABELS[tip.statKey]}
+					{t('tips.bestStat', { stat: t(`statLabels.${tip.statKey}`) })}
 				</span>
 				<span
 					className={`text-[10px] px-1.5 py-0.5 rounded font-semibold ${BADGE_COLORS[tipCategory]}`}
 				>
-					{tipCategory}
+					{t(`modifierPicker.categories.${tipCategory.toLowerCase()}`)}
 				</span>
 				<span className='text-sm font-bold text-green-400'>
 					+{displayValue}%
@@ -235,7 +222,7 @@ function TipCard({
 										<span
 											className={`text-xs font-medium ${categoryColors[m.category]}`}
 										>
-											{m.name}
+											{t(`modifiers.${m.id}.name`, { defaultValue: m.name })}
 										</span>
 									</span>
 								))}
@@ -249,7 +236,7 @@ function TipCard({
 								) : confirming !== comboIdx ? (
 									<button
 										onClick={() => handleApplyClick(comboIdx)}
-										aria-label='Apply tip'
+										aria-label={t('tips.ariaApply')}
 										className='flex items-center justify-center w-9 h-9 rounded-full bg-gray-700 hover:bg-gray-600 text-white text-xl font-bold leading-none transition-all hover:scale-110 active:scale-95'
 									>
 										+
@@ -257,18 +244,18 @@ function TipCard({
 								) : (
 									<>
 										<span className='text-[10px] text-yellow-400 whitespace-nowrap'>
-											Replace?
+											{t('tips.replace')}
 										</span>
 										<button
 											onClick={() => handleConfirm(comboIdx)}
-											aria-label='Confirm apply'
+											aria-label={t('tips.ariaConfirm')}
 											className='flex items-center justify-center w-8 h-8 rounded-full bg-green-700 hover:bg-green-600 text-white text-sm font-bold transition-colors'
 										>
 											✓
 										</button>
 										<button
 											onClick={() => setConfirming(null)}
-											aria-label='Cancel apply'
+											aria-label={t('tips.ariaCancel')}
 											className='flex items-center justify-center w-8 h-8 rounded-full bg-gray-600 hover:bg-gray-500 text-white text-sm font-bold transition-colors'
 										>
 											✕
@@ -296,15 +283,15 @@ const CAT_BADGE: Record<string, string> = {
 }
 
 const COVERAGE_COLOR = [
-	'text-gray-500',   // 0
-	'text-gray-400',   // 1
-	'text-blue-400',   // 2
+	'text-gray-500', // 0
+	'text-gray-400', // 1
+	'text-blue-400', // 2
 	'text-yellow-400', // 3
 	'text-orange-400', // 4
-	'text-red-400',    // 5
-	'text-red-300',    // 6
-	'text-pink-400',   // 7
-	'text-fuchsia-400',// 8
+	'text-red-400', // 5
+	'text-red-300', // 6
+	'text-pink-400', // 7
+	'text-fuchsia-400', // 8
 	'text-violet-400', // 9
 ]
 
@@ -313,6 +300,7 @@ function PriorityRankCard({
 }: {
 	priorityList: ModifierPriorityEntry[]
 }) {
+	const { t } = useTranslation()
 	const [showAll, setShowAll] = useState(false)
 	const visible = showAll ? priorityList : priorityList.slice(0, 10)
 
@@ -321,19 +309,18 @@ function PriorityRankCard({
 			{/* Header */}
 			<div>
 				<h3 className='text-sm font-bold text-white flex items-center gap-1.5'>
-					<span>🛒</span> Priority Purchase Ranking
+					<span>🛒</span> {t('tips.priorityRanking.heading')}
 				</h3>
 				<p className='text-[11px] text-gray-400 mt-0.5'>
-					Modifiers ranked by multi-purpose versatility — covers the most stat
-					categories. Buy these first for the best bang per in-game currency.
+					{t('tips.priorityRanking.description')}
 				</p>
 			</div>
 
 			{/* Column header */}
 			<div className='grid grid-cols-[1.5rem_1fr_auto] gap-x-2 text-[10px] font-semibold text-gray-500 uppercase tracking-wider px-1'>
-				<span>#</span>
-				<span>Modifier</span>
-				<span>Covers</span>
+				<span>{t('tips.priorityRanking.colRank')}</span>
+				<span>{t('tips.priorityRanking.colModifier')}</span>
+				<span>{t('tips.priorityRanking.colCovers')}</span>
 			</div>
 
 			{/* Rows */}
@@ -357,12 +344,16 @@ function PriorityRankCard({
 								<div className='flex items-center gap-1.5 flex-wrap'>
 									<span className='text-[11px]'>{entry.modifier.icon}</span>
 									<span className='text-xs font-semibold text-white'>
-										{entry.modifier.name}
+										{t(`modifiers.${entry.modifier.id}.name`, {
+											defaultValue: entry.modifier.name,
+										})}
 									</span>
 									<span
 										className={`text-[9px] px-1.5 py-0.5 rounded font-semibold ${CAT_BADGE[entry.modifier.category] ?? ''}`}
 									>
-										{entry.modifier.category}
+										{t(
+											`modifierPicker.categories.${entry.modifier.category.toLowerCase()}`,
+										)}
 									</span>
 								</div>
 								{/* Stat chips */}
@@ -372,7 +363,7 @@ function PriorityRankCard({
 											key={sk}
 											className='text-[9px] px-1.5 py-0.5 rounded bg-gray-700/60 text-gray-300'
 										>
-											{STAT_SHORT[sk]}
+											{t(`statShort.${sk}`)}
 										</span>
 									))}
 								</div>
@@ -380,11 +371,13 @@ function PriorityRankCard({
 
 							{/* Coverage badge */}
 							<div className='flex flex-col items-center pt-0.5'>
-								<span className={`text-base font-black leading-none ${colorClass}`}>
+								<span
+									className={`text-base font-black leading-none ${colorClass}`}
+								>
 									{coverageCount}
 								</span>
 								<span className='text-[8px] text-gray-600 leading-none mt-0.5'>
-									stats
+									{t('tips.priorityRanking.statsLabel')}
 								</span>
 							</div>
 						</div>
@@ -398,8 +391,8 @@ function PriorityRankCard({
 					className='w-full text-xs text-emerald-400 hover:text-emerald-300 py-1 transition-colors'
 				>
 					{showAll
-						? '▲ Show top 10 only'
-						: `▼ Show all ${priorityList.length} ranked modifiers`}
+						? t('tips.priorityRanking.showTopOnly')
+						: t('tips.priorityRanking.showAll', { count: priorityList.length })}
 				</button>
 			)}
 		</div>

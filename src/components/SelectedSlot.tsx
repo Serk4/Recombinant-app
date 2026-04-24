@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import type { Modifier } from '../data/modifiers'
 
 interface SelectedSlotProps {
@@ -35,11 +36,14 @@ export function SelectedSlot({
 	isLast,
 	total,
 }: SelectedSlotProps) {
+	const { t } = useTranslation()
 	if (!modifier) {
 		return (
 			<div className='flex-1 min-w-[90px] rounded-xl border-2 border-dashed border-gray-700 bg-gray-800/20 flex flex-col items-center justify-center gap-1 py-4 px-2'>
 				<span className='text-2xl opacity-30'>➕</span>
-				<span className='text-xs text-gray-500'>Slot {index + 1}</span>
+				<span className='text-xs text-gray-500'>
+					{t('selectedSlots.emptySlot', { n: index + 1 })}
+				</span>
 			</div>
 		)
 	}
@@ -64,12 +68,14 @@ export function SelectedSlot({
 
 			{/* Name + badge */}
 			<p className='text-[11px] font-semibold text-white leading-tight text-center'>
-				{modifier.name}
+				{t(`modifiers.${modifier.id}.name`, { defaultValue: modifier.name })}
 			</p>
 			<span
 				className={`self-center text-[9px] px-1 py-0.5 rounded font-semibold ${BADGE_COLORS[modifier.category]}`}
 			>
-				{modifier.category}
+				{t(`modifierPicker.categories.${modifier.category.toLowerCase()}`, {
+					defaultValue: modifier.category,
+				})}
 			</span>
 
 			{/* Reorder buttons */}

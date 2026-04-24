@@ -1,4 +1,5 @@
 import type { CSSProperties } from 'react'
+import { useTranslation } from 'react-i18next'
 import type { StatResult } from '../utils/calculator'
 import { STAT_LABELS } from '../data/modifiers'
 
@@ -103,11 +104,12 @@ const styles = {
 }
 
 export function StatsPanel({ stats }: StatsPanelProps) {
+	const { t } = useTranslation()
 	if (stats.length === 0) {
 		return (
 			<div style={styles.empty}>
 				<span style={styles.emptyIcon}>📊</span>
-				Select up to 3 modifiers to see combined stats
+				{t('stats.empty')}
 			</div>
 		)
 	}
@@ -116,10 +118,11 @@ export function StatsPanel({ stats }: StatsPanelProps) {
 		<div style={styles.panel}>
 			{/* Warning header */}
 			<p style={styles.warning}>
-				<span style={styles.warningIcon}>⚠</span>{' '}
-				Calculations assume{' '}
-				<span style={styles.warningBold}>20 base stacks</span> per module
-				(fully upgraded). Results will differ with lower-tier modules.
+				<span style={styles.warningIcon}>⚠</span> {t('stats.warningPre')}{' '}
+				<span style={styles.warningBold}>
+					{t('stats.warningBold', { count: BASE_STACKS })}
+				</span>{' '}
+				{t('stats.warningPost')}
 			</p>
 
 			{/* Module rows */}
@@ -136,23 +139,41 @@ export function StatsPanel({ stats }: StatsPanelProps) {
 					return (
 						<div key={category}>
 							{/* Category title */}
-							<div style={styles.categoryTitle}>{category}</div>
-
+							<div style={styles.categoryTitle}>
+								{t(`modifierPicker.categories.${category.toLowerCase()}`, {
+									defaultValue: category,
+								})}
+							</div>
 							{/* Single info row: stacks  +bonus% Label  (rate% per stack) */}
 							<div style={styles.infoRow}>
 								<span style={styles.stacksInline}>
 									<span style={styles.stackCurrent}>{finalStacks}</span>
 									<span style={styles.stackBase}>[{BASE_STACKS}]</span>
 								</span>
-								<span style={{ ...styles.bonusPct, ...(isZero ? styles.mutedBuff : {}) }}>
+								<span
+									style={{
+										...styles.bonusPct,
+										...(isZero ? styles.mutedBuff : {}),
+									}}
+								>
 									+{totalStr}%
 								</span>
-								<span style={{ ...styles.effectLabel, ...(isZero ? styles.mutedBuff : {}) }}>
-									{STAT_LABELS[stat]}
+								<span
+									style={{
+										...styles.effectLabel,
+										...(isZero ? styles.mutedBuff : {}),
+									}}
+								>
+									{t(`statLabels.${stat}`, { defaultValue: STAT_LABELS[stat] })}
 								</span>
 								{effectiveRate > 0 && (
-									<span style={{ ...styles.rateLabel, ...(isZero ? styles.mutedBuff : {}) }}>
-										({rateStr}% per stack)
+									<span
+										style={{
+											...styles.rateLabel,
+											...(isZero ? styles.mutedBuff : {}),
+										}}
+									>
+										{t('stats.ratePerStack', { rate: rateStr })}
 									</span>
 								)}
 							</div>

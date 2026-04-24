@@ -1,9 +1,11 @@
+import { useTranslation } from 'react-i18next'
 import type { Modifier } from '../data/modifiers'
 import type { StackChange } from '../data/modifiers'
 import { STAT_LABELS } from '../data/modifiers'
 import { hasSynergy } from '../utils/calculator'
 
 function StackBadge({ change }: { change: StackChange }) {
+	const { t } = useTranslation()
 	const color =
 		change.category === 'Offense'
 			? change.amount > 0
@@ -20,7 +22,10 @@ function StackBadge({ change }: { change: StackChange }) {
 	return (
 		<span className={`text-[11px] font-medium ${color}`}>
 			{prefix}
-			{change.amount} {change.category}
+			{change.amount}{' '}
+			{t(`modifierPicker.categories.${change.category.toLowerCase()}`, {
+				defaultValue: change.category,
+			})}
 		</span>
 	)
 }
@@ -63,6 +68,7 @@ export function ModifierCard({
 	disabled,
 	onClick,
 }: ModifierCardProps) {
+	const { t } = useTranslation()
 	const synergy = !selected && hasSynergy(modifier, selectedModifiers)
 
 	return (
@@ -91,7 +97,7 @@ export function ModifierCard({
 			{/* Synergy badge */}
 			{synergy && (
 				<span className='absolute top-2 right-2 text-[10px] bg-yellow-500 text-black px-1.5 py-0.5 rounded font-bold'>
-					SYNERGY
+					{t('synergy.badge')}
 				</span>
 			)}
 
@@ -99,16 +105,23 @@ export function ModifierCard({
 				<div className='flex-1 min-w-0'>
 					<div className='flex items-center gap-2 flex-wrap'>
 						<span className='font-semibold text-sm text-white leading-tight'>
-							{modifier.name}
+							{t(`modifiers.${modifier.id}.name`, {
+								defaultValue: modifier.name,
+							})}
 						</span>
 						<span
 							className={`text-[10px] px-1.5 py-0.5 rounded ${CATEGORY_BADGE[modifier.category]}`}
 						>
-							{modifier.category}
+							{t(
+								`modifierPicker.categories.${modifier.category.toLowerCase()}`,
+								{ defaultValue: modifier.category },
+							)}
 						</span>
 					</div>
 					<p className='text-xs text-gray-400 mt-1 leading-snug'>
-						{modifier.description}
+						{t(`modifiers.${modifier.id}.description`, {
+							defaultValue: modifier.description,
+						})}
 					</p>
 
 					{/* Stack changes */}
@@ -122,7 +135,9 @@ export function ModifierCard({
 
 					{/* Effect description */}
 					<p className='text-[10px] text-gray-500 mt-1 leading-snug italic'>
-						{modifier.effectDescription}
+						{t(`modifiers.${modifier.id}.effectDescription`, {
+							defaultValue: modifier.effectDescription,
+						})}
 					</p>
 
 					{/* Stat previews (non-empty only) */}
@@ -133,7 +148,10 @@ export function ModifierCard({
 									key={s.stat}
 									className='text-[11px] bg-gray-700/60 text-gray-300 px-1.5 py-0.5 rounded'
 								>
-									+{s.baseValue}% {STAT_LABELS[s.stat]}
+									+{s.baseValue}%{' '}
+									{t(`statLabels.${s.stat}`, {
+										defaultValue: STAT_LABELS[s.stat],
+									})}
 								</span>
 							))}
 						</div>
