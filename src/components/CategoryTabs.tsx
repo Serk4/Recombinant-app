@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import type { Category } from '../data/modifiers'
 
 interface CategoryTabsProps {
@@ -30,6 +31,7 @@ const TAB_ACTIVE: Record<string, string> = {
 }
 
 export function CategoryTabs({ active, onChange }: CategoryTabsProps) {
+	const { t } = useTranslation()
 	return (
 		<div className='flex gap-1.5 overflow-x-auto pb-1 px-0.5 pt-0.5 scrollbar-hide'>
 			{TABS.map((tab) => (
@@ -42,7 +44,7 @@ export function CategoryTabs({ active, onChange }: CategoryTabsProps) {
             ${active === tab ? `ring-2 ring-inset ${TAB_ACTIVE[tab]} scale-105` : 'opacity-70 hover:opacity-90'}
           `}
 				>
-					{tab}
+					{t(`modifierPicker.categories.${tab.toLowerCase()}`)}
 				</button>
 			))}
 		</div>

@@ -1,0 +1,261 @@
+{
+	"appTitle": "リコンビナント",
+	"menu": {
+		"label": "メニュー",
+		"openMenu": "メニューを開く",
+		"view": "表示",
+		"build": "ビルド",
+		"tips": "ヒント",
+		"language": "言語"
+	},
+	"selectedSlots": {
+		"heading": "選択中のパッシブ改造 ({{count}}/{{max}})",
+		"emptySlot": "スロット {{n}}",
+		"clearAll": "すべてクリア",
+		"slotsRemaining_one": "残り{{count}}スロット",
+		"slotsRemaining_other": "残り{{count}}スロット"
+	},
+	"modifierPicker": {
+		"title": "パッシブ改造を選択",
+		"categories": {
+			"all": "すべて",
+			"offense": "攻撃",
+			"defense": "防衛",
+			"utility": "ユーティリティ",
+			"wildcard": "ワイルドカード"
+		}
+	},
+	"modifiers": {
+		"amplify": {
+			"name": "アンプリファイ",
+			"description": "攻撃スタックを5追加。貢献タイプは変化なし。",
+			"effectDescription": "スタックタイプの変更なし"
+		},
+		"consume": {
+			"name": "コンシューム",
+			"description": "防衛スタック5とユーティリティスタック5を消費して、攻撃スタック10を獲得。",
+			"effectDescription": "スタックタイプの変更なし"
+		},
+		"saturate": {
+			"name": "サチュレート",
+			"description": "攻撃スタックを２５追加するが、それらはステータスに貢献しなくなる。",
+			"effectDescription": "攻撃スタックはステータスへの貢献を停止（他のパッシブのカウントとしては引き続き機能）"
+		},
+		"compress": {
+			"name": "コンプレス",
+			"description": "攻撃スタックを１０削除するが、残りの各スタックは５０％強化される。",
+			"effectDescription": "残りの各攻撃スタックが５０％強化される"
+		},
+		"convert1": {
+			"name": "コンバート1",
+			"description": "攻撃スタックが武器ハンドリングの代わりに、スタックごとに３％のヘッドショットダメージを提供するようになる。",
+			"effectDescription": "攻撃 → ヘッドショットダメージ（スタックごとに基本３％）（武器ハンドリングの代わり）"
+		},
+		"convert2": {
+			"name": "コンバート2",
+			"description": "攻撃スタックが武器ハンドリングの代わりに、スタックごとに１％のマガジンサイズを提供するようになる。",
+			"effectDescription": "攻撃 → マガジンサイズ（スタックごとに基本１％）（武器ハンドリングの代わり）"
+		},
+		"split": {
+			"name": "スプリット",
+			"description": "攻撃スタック15を防衛スタック10とユーティリティスタック10として再分配する。",
+			"effectDescription": "スタックを再分配"
+		},
+		"pivotO": {
+			"name": "ピボット",
+			"description": "現在最も低いモジュールを強化する。",
+			"effectDescription": "現在最も低いモジュールを増加させる"
+		},
+		"invertO": {
+			"name": "インバート",
+			"description": "攻撃スタックを現在最高のモジュールスタックと交換する。攻撃スタックが既に最高、または防衛とユーティリティスタックが最高で同点の場合は何も起きない。",
+			"effectDescription": "攻撃スタックを最も高い他のモジュールと交換。攻撃が既に最高、または防衛とユーティリティが最高で同点の場合は失敗。"
+		},
+		"stabilizeO": {
+			"name": "スタビライズ",
+			"description": "攻撃スタックがロックされ変更できなくなる。",
+			"effectDescription": "攻撃スタックが現在の値で固定され、以降の攻撃スタックへの変更はすべて無視される。"
+		},
+		"amplifyD": {
+			"name": "アンプリファイ",
+			"description": "防衛スタックを５追加。貢献タイプは変化なし。",
+			"effectDescription": "スタックタイプの変更なし"
+		},
+		"consumeD": {
+			"name": "コンシューム",
+			"description": "攻撃スタック５とユーティリティスタック５を消費して、防衛スタック１０を獲得。",
+			"effectDescription": "スタックタイプの変更なし"
+		},
+		"saturateD": {
+			"name": "サチュレート",
+			"description": "防衛スタックを２５追加するが、それらはステータスに貢献しなくなる。",
+			"effectDescription": "防衛スタックはステータスへの貢献を停止（カスケード／コンバートなど他のパッシブのカウントとしては機能）"
+		},
+		"compressD": {
+			"name": "コンプレス",
+			"description": "防衛スタックを１０削除するが、残りの各スタックは５０％強化される。",
+			"effectDescription": "残りの各防衛スタックが５０％強化される"
+		},
+		"convert1D": {
+			"name": "コンバート1",
+			"description": "防衛スタックが最大アーマーの代わりに、スタックごとに0.5％のエリートからの防護を提供するようになる。",
+			"effectDescription": "防衛 → エリートからの防護（0.5％/スタック基本、コンプレス+ヌリファイ時は0.75％/スタック）（最大アーマーの代わり）"
+		},
+		"convert2D": {
+			"name": "コンバート2",
+			"description": "防衛スタックが最大アーマーの代わりに、スタックごとに１％のハザード防護を提供するようになる。",
+			"effectDescription": "防衛 → ハザード防護（１％/スタック基本、コンプレス時は1.5％/スタック）（最大アーマーの代わり）"
+		},
+		"splitD": {
+			"name": "スプリット",
+			"description": "防衛スタック15を攻撃スタック10とユーティリティスタック10として再分配する。",
+			"effectDescription": "スタックを再分配"
+		},
+		"pivotD": {
+			"name": "ピボット",
+			"description": "防衛スタックを使って現在最も低いモジュールを強化する。",
+			"effectDescription": "利用可能な防衛スタックを使って最も低いモジュールのスタックを増加させる。回復型ビルドに有効。"
+		},
+		"invertD": {
+			"name": "インバート",
+			"description": "防衛スタックを現在最高のモジュールスタックと交換する。防衛スタックが既に最高、または攻撃とユーティリティスタックが最高で同点の場合は何も起きない。",
+			"effectDescription": "防衛スタックを最も高い他のモジュールと交換。防衛が既に最高、または攻撃とユーティリティが最高で同点の場合は失敗。"
+		},
+		"stabilizeD": {
+			"name": "スタビライズ",
+			"description": "防衛スタックがロックされ変更できなくなる。",
+			"effectDescription": "防衛スタックが現在の値で固定され、以降の防衛スタックへの変更はすべて無視される。"
+		},
+		"amplifyU": {
+			"name": "アンプリファイ",
+			"description": "ユーティリティスタックを５追加。貢献タイプは変化なし。",
+			"effectDescription": "スタックタイプの変更なし"
+		},
+		"consumeU": {
+			"name": "コンシューム",
+			"description": "攻撃スタック５と防衛スタック５を消費して、ユーティリティスタック１０を獲得。",
+			"effectDescription": "スタックタイプの変更なし"
+		},
+		"saturateU": {
+			"name": "サチュレート",
+			"description": "ユーティリティスタックを２５追加するが、それらはステータスに貢献しなくなる。",
+			"effectDescription": "ユーティリティスタックはステータスへの貢献を停止（カスケード／コンバートなど他のパッシブのカウントとしては機能）"
+		},
+		"compressU": {
+			"name": "コンプレス",
+			"description": "ユーティリティスタックを１０削除するが、残りの各スタックは５０％強化される。",
+			"effectDescription": "残りの各ユーティリティスタックが５０％強化される"
+		},
+		"convert1U": {
+			"name": "コンバート1",
+			"description": "ユーティリティスタックがスキルダメージの代わりに、スタックごとに１％のスキル修復を提供するようになる。",
+			"effectDescription": "ユーティリティ → スキル修復（１％/スタック）（スキルダメージの代わり）"
+		},
+		"convert2U": {
+			"name": "コンバート2",
+			"description": "ユーティリティスタックがスキルダメージの代わりに、スタックごとに１％の状態異常効果を提供するようになる。",
+			"effectDescription": "ユーティリティ → 状態異常効果（１％/スタック）（スキルダメージの代わり）"
+		},
+		"splitU": {
+			"name": "スプリット",
+			"description": "ユーティリティスタック１５を攻撃スタック１０と防衛スタック１０として再分配する。",
+			"effectDescription": "スタックを再分配"
+		},
+		"pivotU": {
+			"name": "ピボット",
+			"description": "現在最も低いモジュールを増加させることで、最も低いモジュールを強化する。",
+			"effectDescription": "現在最も低いモジュールのスタックを増加させる"
+		},
+		"invertU": {
+			"name": "インバート",
+			"description": "ユーティリティスタックを現在最高のモジュールスタックと交換する。ユーティリティスタックが既に最高、または攻撃と防衛スタックが最高で同点の場合は何も起きない。",
+			"effectDescription": "ユーティリティスタックを最も高い他のモジュールと交換。ユーティリティが既に最高、または攻撃と防衛が最高で同点の場合は失敗。"
+		},
+		"stabilizeU": {
+			"name": "スタビライズ",
+			"description": "ユーティリティスタックがロックされ変更できなくなる。",
+			"effectDescription": "ユーティリティスタックが現在の値で固定され、以降のユーティリティスタックへの変更はすべて無視される。"
+		},
+		"nullify": {
+			"name": "ヌリファイ",
+			"description": "最も低いモジュールのこれまでの値変更をすべて反転する—追加は削除に、削除は追加になる。",
+			"effectDescription": "最も低いスタックモジュールの加算／減算を反転。２つ以上のモジュールが最低で同点の場合は失敗。インバートパッシブは影響を受けない。"
+		},
+		"cascade": {
+			"name": "カスケード",
+			"description": "最高のモジュールのスタックを無効にし、その値の半分（切り上げ）を他の２つのモジュールに均等分配する。",
+			"effectDescription": "最高モジュールのスタックが貢献を停止；他て2モジュールに+⌈最高/2⌉スタック追加。２つ以上のモジュールが最高で同点の場合は失敗。"
+		},
+		"converge": {
+			"name": "コンバージ",
+			"description": "最も低いモジュールが他の２つのモジュールの平均スタック数を獲得し、他の２つは０になる。",
+			"effectDescription": "最低モジュール = 他の2つの平均値、その後他の2つは0に。２つ以上のモジュールが最低で同点の場合は失敗。"
+		},
+		"equalize": {
+			"name": "イコライズ",
+			"description": "３つのモジュールがすべて中間のスタック値に等しくなる。",
+			"effectDescription": "すべてのモジュールのスタック数が中底値に设定される。中底値が最高または最低と同点の場合は失敗。"
+		}
+	},
+	"statLabels": {
+		"weaponHandling": "武器操作",
+		"headshotDamage": "ヘッドショットダメージ",
+		"magazineSize": "マガジンサイズ",
+		"totalArmor": "最大アーマー",
+		"protectionFromElites": "エリートからの防護",
+		"hazardProtection": "ハザード防護",
+		"skillDamage": "スキルダメージ",
+		"statusEffects": "状態異常効果",
+		"skillRepair": "スキル修復"
+	},
+	"tips": {
+		"heading": "最適コンビネーションガイド",
+		"description": "総ステータス値でランク付けされた最適なモディファイアの組み合わせ。表示順序は最適なスロット配置順です\u2014スロットの順番によって最終値が変わります。",
+		"filterAll": "すべて",
+		"noResults": "このカテゴリのヒントはありません。",
+		"showLess": "\u25b2 表示を減らす",
+		"showMore": "\u25bc さらに{{count}}件のヒントを表示",
+		"bestStat": "最高{{stat}}",
+		"replace": "置き換えますか？",
+		"ariaApply": "ヒントを適用",
+		"ariaConfirm": "適用を確認",
+		"ariaCancel": "キャンセル",
+		"priorityRanking": {
+			"heading": "優先購入ランキング",
+			"description": "多目的な汎用性でランク付けされたモディファイア\u2014最も多くのステータスカテゴリをカバー。ゲーム内通貨を最大限活かすためにこれらを優先して購入してください。",
+			"colRank": "#",
+			"colModifier": "モディファイア",
+			"colCovers": "カバー",
+			"statsLabel": "ステータス",
+			"showTopOnly": "\u25b2 上位10件のみ表示",
+			"showAll": "\u25bc ランク付きモディファイア{{count}}件をすべて表示"
+		}
+	},
+	"synergy": {
+		"badge": "相性",
+		"hint": "<strong>相性</strong>マークのカードは現在の選択と相性が良いです。"
+	},
+	"footer": {
+		"line1": "Tom Clancy's The Division 2 \u2014 Rise Up Y8S1",
+		"line2": "モディファイアの値は概略値であり、参考目的でのみご利用ください。"
+	},
+	"stats": {
+		"moduleStacksHeading": "モジュールスタック",
+		"empty": "モディファイアを最大3つ選択してスタッツを確認",
+		"warningPre": "計算は",
+		"warningBold": "{{count}} ベーススタック",
+		"warningPost": "を前提としています（完全強化済み）。低レアのモジュールでは結果が異なります。",
+		"ratePerStack": "(スタックあたり{{rate}}%)"
+	},
+	"statShort": {
+		"weaponHandling": "武器",
+		"headshotDamage": "HS",
+		"magazineSize": "弾数",
+		"totalArmor": "アーマー",
+		"protectionFromElites": "PFE",
+		"hazardProtection": "危険",
+		"skillDamage": "スキル",
+		"statusEffects": "状態",
+		"skillRepair": "修復"
+	}
+}
