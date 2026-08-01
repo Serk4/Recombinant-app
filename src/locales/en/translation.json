@@ -5,10 +5,9 @@
 		"openMenu": "Open menu",
 		"view": "View",
 		"mapMarkers": "Map Markers",
-		"build": "Recombinant - Rise Up Y8S1",
-		"tips": "Recombinant Tips - Rise Up Y8S1",
-		"language": "Language",
-		"badge": "BADGE"
+		"build": "Recombinant Modifiers",
+		"tips": "Recombinant Tips",
+		"language": "Language"
 	},
 	"selectedSlots": {
 		"heading": "Selected Passive Modifiers ({{count}}/{{max}})",
@@ -238,7 +237,7 @@
 		"hint": "Cards marked <strong>SYNERGY</strong> pair well with your current selection."
 	},
 	"footer": {
-		"line1": "Tom Clancy's The Division 2 — Into the Dark",
+		"line1": "Tom Clancy's The Division 2",
 		"line2": "Modifier values are approximate and for reference only."
 	},
 	"stats": {

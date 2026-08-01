@@ -15,6 +15,7 @@ import { TipsPanel } from './components/TipsPanel'
 import { MapMarkerTab } from './components/MapMarkerTab'
 
 type ActiveTab = 'build' | 'tips' | 'mapMarker'
+const SEASON_BADGE_TEXT = 'Rise Up - Y8S1'
 
 function App() {
 	const [selected, setSelected] = useState<Modifier[]>([])
@@ -154,7 +155,7 @@ function App() {
 								<div className='flex items-center gap-1.5'>
 									{t('menu.build')}
 									<span className='inline-block px-1.5 py-0.5 text-[9px] font-bold text-orange-300 bg-orange-900/40 border border-orange-700/60 rounded'>
-										{t('menu.badge')}
+										{SEASON_BADGE_TEXT}
 									</span>
 								</div>
 							</button>
@@ -173,7 +174,7 @@ function App() {
 								<div className='flex items-center gap-1.5'>
 									{t('menu.tips')}
 									<span className='inline-block px-1.5 py-0.5 text-[9px] font-bold text-orange-300 bg-orange-900/40 border border-orange-700/60 rounded'>
-										{t('menu.badge')}
+										{SEASON_BADGE_TEXT}
 									</span>
 								</div>
 							</button>
