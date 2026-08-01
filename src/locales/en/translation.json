@@ -7,7 +7,8 @@
 		"mapMarkers": "Map Markers",
 		"build": "Recombinant - Rise Up Y8S1",
 		"tips": "Recombinant Tips - Rise Up Y8S1",
-		"language": "Language"
+		"language": "Language",
+		"badge": "BADGE"
 	},
 	"selectedSlots": {
 		"heading": "Selected Passive Modifiers ({{count}}/{{max}})",

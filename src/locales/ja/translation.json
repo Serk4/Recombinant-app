@@ -7,7 +7,8 @@
 		"mapMarkers": "マップマーカー",
 		"build": "リコンビナント - ライズアップ Y8S1",
 		"tips": "リコンビナントヒント - ライズアップ Y8S1",
-		"language": "言語"
+		"language": "言語",
+		"badge": "バッジ"
 	},
 	"selectedSlots": {
 		"heading": "選択中のパッシブ改造 ({{count}}/{{max}})",

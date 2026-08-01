@@ -154,7 +154,7 @@ function App() {
 								<div className='flex items-center gap-1.5'>
 									{t('menu.build')}
 									<span className='inline-block px-1.5 py-0.5 text-[9px] font-bold text-orange-300 bg-orange-900/40 border border-orange-700/60 rounded'>
-										BADGE
+										{t('menu.badge')}
 									</span>
 								</div>
 							</button>
@@ -173,7 +173,7 @@ function App() {
 								<div className='flex items-center gap-1.5'>
 									{t('menu.tips')}
 									<span className='inline-block px-1.5 py-0.5 text-[9px] font-bold text-orange-300 bg-orange-900/40 border border-orange-700/60 rounded'>
-										BADGE
+										{t('menu.badge')}
 									</span>
 								</div>
 							</button>
