@@ -257,5 +257,59 @@
 		"skillDamage": "Skill Dmg",
 		"statusEffects": "Status",
 		"skillRepair": "Repair"
+	},
+	"mapMarker": {
+		"heading": "Map Markers",
+		"description": "Save and manage coordinate markers for game locations",
+		"empty": {
+			"noSets": "No coordinate sets created yet. Create one to get started!"
+		},
+		"sets": {
+			"heading": "Coordinate Sets",
+			"coordinates": "coordinates"
+		},
+		"coordinates": {
+			"heading": "Coordinates"
+		},
+		"coordinateList": {
+			"empty": "No coordinates in this set yet.",
+			"viewPhoto": "View photo",
+			"edit": "Edit coordinate",
+			"delete": "Delete coordinate"
+		},
+		"form": {
+			"coordinateType": "Coordinate Type",
+			"xCoord": "X Coordinate",
+			"yCoord": "Y Coordinate",
+			"notes": "Notes",
+			"notesPlaceholder": "Enter any notes about this location...",
+			"photo": "Photo",
+			"optional": "optional",
+			"removePhoto": "Remove Photo",
+			"save": "Save Coordinate",
+			"cancel": "Cancel"
+		},
+		"newSet": {
+			"name": "Set Name",
+			"namePlaceholder": "e.g., Beacon, Stash, etc.",
+			"map": "Map",
+			"coordinateType": "Coordinate Type"
+		},
+		"button": {
+			"createSet": "Create Coordinate Set",
+			"newSet": "New Set",
+			"create": "Create",
+			"cancel": "Cancel",
+			"addCoord": "Add Coordinate",
+			"rename": "Rename set",
+			"delete": "Delete set"
+		},
+		"validation": {
+			"invalidCoordinates": "Please enter valid X and Y coordinates.",
+			"setNameRequired": "Set name is required."
+		},
+		"confirmation": {
+			"deleteSet": "Are you sure you want to delete this coordinate set? This cannot be undone."
+		}
 	}
 }

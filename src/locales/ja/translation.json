@@ -257,5 +257,59 @@
 		"skillDamage": "スキル",
 		"statusEffects": "状態",
 		"skillRepair": "修復"
+	},
+	"mapMarker": {
+		"heading": "マップマーカー",
+		"description": "ゲーム内の場所の座標マーカーを保存および管理します",
+		"empty": {
+			"noSets": "まだ座標セットが作成されていません。1つ作成して始めましょう!"
+		},
+		"sets": {
+			"heading": "座標セット",
+			"coordinates": "座標"
+		},
+		"coordinates": {
+			"heading": "座標"
+		},
+		"coordinateList": {
+			"empty": "このセットにはまだ座標がありません。",
+			"viewPhoto": "写真を表示",
+			"edit": "座標を編集",
+			"delete": "座標を削除"
+		},
+		"form": {
+			"coordinateType": "座標の種類",
+			"xCoord": "X座標",
+			"yCoord": "Y座標",
+			"notes": "メモ",
+			"notesPlaceholder": "この場所についてのメモを入力...",
+			"photo": "写真",
+			"optional": "オプション",
+			"removePhoto": "写真を削除",
+			"save": "座標を保存",
+			"cancel": "キャンセル"
+		},
+		"newSet": {
+			"name": "セット名",
+			"namePlaceholder": "例：Beacon、Stashなど",
+			"map": "マップ",
+			"coordinateType": "座標の種類"
+		},
+		"button": {
+			"createSet": "座標セットを作成",
+			"newSet": "新規セット",
+			"create": "作成",
+			"cancel": "キャンセル",
+			"addCoord": "座標を追加",
+			"rename": "セットの名前を変更",
+			"delete": "セットを削除"
+		},
+		"validation": {
+			"invalidCoordinates": "有効なX座標とY座標を入力してください。",
+			"setNameRequired": "セット名は必須です。"
+		},
+		"confirmation": {
+			"deleteSet": "この座標セットを削除してもよろしいですか? この操作は元に戻せません。"
+		}
 	}
 }
