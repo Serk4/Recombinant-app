@@ -1,16 +1,15 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import type { Coordinate, CoordinateType } from '../data/mapMarkers'
+import type { Coordinate } from '../data/mapMarkers'
 import { PhotoModal } from './PhotoModal'
 
 interface CoordinateListProps {
 	coordinates: Coordinate[]
-	coordinateType: CoordinateType
 	onEdit: (coordinate: Coordinate) => void
 	onDelete: (id: string) => void
 }
 
-export function CoordinateList({ coordinates, coordinateType, onEdit, onDelete }: CoordinateListProps) {
+export function CoordinateList({ coordinates, onEdit, onDelete }: CoordinateListProps) {
 	const { t } = useTranslation()
 	const [selectedPhoto, setSelectedPhoto] = useState<string | null>(null)
 
@@ -46,7 +45,7 @@ export function CoordinateList({ coordinates, coordinateType, onEdit, onDelete }
 						<div className='flex items-center gap-2 flex-shrink-0'>
 							{coord.photoBase64 && (
 								<button
-									onClick={() => setSelectedPhoto(coord.photoBase64)}
+									onClick={() => setSelectedPhoto(coord.photoBase64 ?? null)}
 									className='px-2.5 py-1 bg-blue-900/30 hover:bg-blue-800/50 text-blue-400 hover:text-blue-300 text-xs font-semibold rounded border border-blue-700/40 transition-colors'
 									title={t('mapMarker.coordinateList.viewPhoto')}
 								>

@@ -1,18 +1,16 @@
 import { useState, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import type { Coordinate, CoordinateType } from '../data/mapMarkers'
+import type { Coordinate } from '../data/mapMarkers'
 
 interface CoordinateFormProps {
 	onSave: (coordinate: Coordinate) => void
 	onCancel: () => void
-	coordinateType: CoordinateType
 	initialCoordinate?: Coordinate
 }
 
 export function CoordinateForm({
 	onSave,
 	onCancel,
-	coordinateType,
 	initialCoordinate,
 }: CoordinateFormProps) {
 	const { t } = useTranslation()

@@ -8,8 +8,7 @@ import { CoordinateList } from './CoordinateList'
 
 export function MapMarkerTab() {
 	const { t } = useTranslation()
-	const { coordinateSets, saveCoordinateSet, deleteCoordinateSet, getNextSetName } =
-		useMapMarkerStorage()
+	const { coordinateSets, saveCoordinateSet, deleteCoordinateSet } = useMapMarkerStorage()
 
 	const [selectedSetId, setSelectedSetId] = useState<string | null>(null)
 	const [showNewSetForm, setShowNewSetForm] = useState(false)
@@ -327,7 +326,6 @@ export function MapMarkerTab() {
 												setShowCoordForm(false)
 												setEditingCoordinate(null)
 											}}
-											coordinateType={selectedSet.coordinateType}
 											initialCoordinate={editingCoordinate ?? undefined}
 										/>
 									</div>
@@ -335,7 +333,6 @@ export function MapMarkerTab() {
 
 								<CoordinateList
 									coordinates={selectedSet.coordinates}
-									coordinateType={selectedSet.coordinateType}
 									onEdit={(coord) => {
 										setEditingCoordinate(coord)
 										setShowCoordForm(true)
