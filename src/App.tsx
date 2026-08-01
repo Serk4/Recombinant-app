@@ -12,8 +12,9 @@ import { ModifierCard } from './components/ModifierCard'
 import { SelectedSlot } from './components/SelectedSlot'
 import { StatsPanel } from './components/StatsPanel'
 import { TipsPanel } from './components/TipsPanel'
+import { MapMarkerTab } from './components/MapMarkerTab'
 
-type ActiveTab = 'build' | 'tips'
+type ActiveTab = 'build' | 'tips' | 'mapMarker'
 
 function App() {
 	const [selected, setSelected] = useState<Modifier[]>([])
@@ -151,6 +152,19 @@ function App() {
 							>
 								<span>💡</span> {t('menu.tips')}
 							</button>
+							<button
+								onClick={() => {
+									setActiveTab('mapMarker')
+									setMenuOpen(false)
+								}}
+								className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors text-left ${
+									activeTab === 'mapMarker'
+										? 'bg-gray-700 text-white'
+										: 'text-gray-400 hover:bg-gray-800 hover:text-white'
+								}`}
+							>
+								<span>📍</span> {t('mapMarker.heading')}
+							</button>
 
 							<div className='border-t border-gray-700 my-2' />
 
@@ -201,40 +215,42 @@ function App() {
 				)}
 
 				{/* ── SELECTED SLOTS BAR ── */}
-				<div className='sticky top-[57px] z-10 bg-gray-950/95 backdrop-blur pt-3 pb-2'>
-					<div className='flex items-center justify-between mb-2'>
-						<span className='text-xs text-gray-400 font-medium'>
-							{t('selectedSlots.heading', {
-								count: selected.length,
-								max: MAX_SELECTED,
-							})}
-						</span>
-						{selected.length > 0 && (
-							<button
-								onClick={clearAll}
-								className='text-xs font-semibold px-2.5 py-1 rounded-lg bg-red-900/30 hover:bg-red-800/50 text-red-400 hover:text-red-300 border border-red-700/40 hover:border-red-600/60 transition-colors'
-							>
-								✕ {t('selectedSlots.clearAll')}
-							</button>
-						)}
-					</div>
+				{activeTab !== 'mapMarker' && (
+					<div className='sticky top-[57px] z-10 bg-gray-950/95 backdrop-blur pt-3 pb-2'>
+						<div className='flex items-center justify-between mb-2'>
+							<span className='text-xs text-gray-400 font-medium'>
+								{t('selectedSlots.heading', {
+									count: selected.length,
+									max: MAX_SELECTED,
+								})}
+							</span>
+							{selected.length > 0 && (
+								<button
+									onClick={clearAll}
+									className='text-xs font-semibold px-2.5 py-1 rounded-lg bg-red-900/30 hover:bg-red-800/50 text-red-400 hover:text-red-300 border border-red-700/40 hover:border-red-600/60 transition-colors'
+								>
+									✕ {t('selectedSlots.clearAll')}
+								</button>
+							)}
+						</div>
 
-					<div className='flex gap-2'>
-						{Array.from({ length: MAX_SELECTED }).map((_, i) => (
-							<SelectedSlot
-								key={i}
-								index={i}
-								modifier={selected[i] ?? null}
-								onRemove={() => removeModifier(i)}
-								onMoveUp={() => moveModifier(i, i - 1)}
-								onMoveDown={() => moveModifier(i, i + 1)}
-								isFirst={i === 0}
-								isLast={i === selected.length - 1}
-								total={selected.length}
-							/>
-						))}
+						<div className='flex gap-2'>
+							{Array.from({ length: MAX_SELECTED }).map((_, i) => (
+								<SelectedSlot
+									key={i}
+									index={i}
+									modifier={selected[i] ?? null}
+									onRemove={() => removeModifier(i)}
+									onMoveUp={() => moveModifier(i, i - 1)}
+									onMoveDown={() => moveModifier(i, i + 1)}
+									isFirst={i === 0}
+									isLast={i === selected.length - 1}
+									total={selected.length}
+								/>
+							))}
+						</div>
 					</div>
-				</div>
+				)}
 
 				{activeTab === 'build' ? (
 					<>
@@ -289,7 +305,7 @@ function App() {
 							</div>
 						</section>
 					</>
-				) : (
+				) : activeTab === 'tips' ? (
 					/* ── TIPS TAB ── */
 					<section className='mt-4 bg-gray-900/60 border border-gray-800 rounded-2xl p-4'>
 						<h2 className='text-sm font-bold text-gray-300 mb-1 flex items-center gap-1.5'>
@@ -305,6 +321,9 @@ function App() {
 							}}
 						/>
 					</section>
+				) : (
+					/* ── MAP MARKER TAB ── */
+					<MapMarkerTab />
 				)}
 
 				{/* Footer */}
