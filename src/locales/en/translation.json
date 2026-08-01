@@ -1,12 +1,14 @@
 {
-	"appTitle": "Recombinant",
+	"appTitle": "SHD Tools",
 	"menu": {
 		"label": "Menu",
 		"openMenu": "Open menu",
 		"view": "View",
-		"build": "Build",
-		"tips": "Tips",
-		"language": "Language"
+		"mapMarkers": "Map Markers",
+		"build": "Recombinant - Rise Up Y8S1",
+		"tips": "Recombinant Tips - Rise Up Y8S1",
+		"language": "Language",
+		"badge": "BADGE"
 	},
 	"selectedSlots": {
 		"heading": "Selected Passive Modifiers ({{count}}/{{max}})",
@@ -236,7 +238,7 @@
 		"hint": "Cards marked <strong>SYNERGY</strong> pair well with your current selection."
 	},
 	"footer": {
-		"line1": "Tom Clancy's The Division 2 \u2014 Rise Up Y8S1",
+		"line1": "Tom Clancy's The Division 2 — Into the Dark",
 		"line2": "Modifier values are approximate and for reference only."
 	},
 	"stats": {
