@@ -1,11 +1,12 @@
 {
-	"appTitle": "リコンビナント",
+	"appTitle": "SHD Tools",
 	"menu": {
 		"label": "メニュー",
 		"openMenu": "メニューを開く",
 		"view": "表示",
-		"build": "ビルド",
-		"tips": "ヒント",
+		"mapMarkers": "マップマーカー",
+		"build": "リコンビナント - ライズアップ Y8S1",
+		"tips": "リコンビナントヒント - ライズアップ Y8S1",
 		"language": "言語"
 	},
 	"selectedSlots": {
@@ -236,7 +237,7 @@
 		"hint": "<strong>相性</strong>マークのカードは現在の選択と相性が良いです。"
 	},
 	"footer": {
-		"line1": "Tom Clancy's The Division 2 \u2014 Rise Up Y8S1",
+		"line1": "Tom Clancy's The Division 2 — Into the Dark",
 		"line2": "モディファイアの値は概略値であり、参考目的でのみご利用ください。"
 	},
 	"stats": {

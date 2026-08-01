@@ -111,7 +111,7 @@ function App() {
 							{t('appTitle')}
 						</h1>
 						<p className='text-[10px] text-gray-400 leading-tight'>
-							Tom Clancy's The Division 2 · Rise Up Y8S1
+							Tom Clancy's The Division 2
 						</p>
 					</div>
 
@@ -128,6 +128,19 @@ function App() {
 							</p>
 							<button
 								onClick={() => {
+									setActiveTab('mapMarker')
+									setMenuOpen(false)
+								}}
+								className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors text-left ${
+									activeTab === 'mapMarker'
+										? 'bg-gray-700 text-white'
+										: 'text-gray-400 hover:bg-gray-800 hover:text-white'
+								}`}
+							>
+								<span>📍</span> {t('mapMarker.heading')}
+							</button>
+							<button
+								onClick={() => {
 									setActiveTab('build')
 									setMenuOpen(false)
 								}}
@@ -137,7 +150,13 @@ function App() {
 										: 'text-gray-400 hover:bg-gray-800 hover:text-white'
 								}`}
 							>
-								<span>🔨</span> {t('menu.build')}
+								<span>🔨</span>
+								<div className='flex items-center gap-1.5'>
+									{t('menu.build')}
+									<span className='inline-block px-1.5 py-0.5 text-[9px] font-bold text-orange-300 bg-orange-900/40 border border-orange-700/60 rounded'>
+										BADGE
+									</span>
+								</div>
 							</button>
 							<button
 								onClick={() => {
@@ -150,20 +169,13 @@ function App() {
 										: 'text-gray-400 hover:bg-gray-800 hover:text-white'
 								}`}
 							>
-								<span>💡</span> {t('menu.tips')}
-							</button>
-							<button
-								onClick={() => {
-									setActiveTab('mapMarker')
-									setMenuOpen(false)
-								}}
-								className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors text-left ${
-									activeTab === 'mapMarker'
-										? 'bg-gray-700 text-white'
-										: 'text-gray-400 hover:bg-gray-800 hover:text-white'
-								}`}
-							>
-								<span>📍</span> {t('mapMarker.heading')}
+								<span>💡</span>
+								<div className='flex items-center gap-1.5'>
+									{t('menu.tips')}
+									<span className='inline-block px-1.5 py-0.5 text-[9px] font-bold text-orange-300 bg-orange-900/40 border border-orange-700/60 rounded'>
+										BADGE
+									</span>
+								</div>
 							</button>
 
 							<div className='border-t border-gray-700 my-2' />
